@@ -1,87 +1,88 @@
-A-R_V-Y;Toutes causes de mortalit (A00-Y89) sauf S00-T98
+A-R_V-Y;Toutes causes de mortalitï¿½ (A00-Y89) sauf S00-T98
+A-U;Causes interne de morbiditï¿½ et mortalitï¿½ 
 A_B;Certaines maladies infectieuses et parasitaires (A00-B99)
 A15-A19_B90;Tuberculose
-B15-B19_B942;Hpatite virale et squelles d'hpatite virale
-B20-B24;Maladies dues au virus de l'immunodficience humaine [VIH]
+B15-B19_B942;Hï¿½patite virale et sï¿½quelles d'hï¿½patite virale
+B20-B24;Maladies dues au virus de l'immunodï¿½ficience humaine [VIH]
 A_B_OTH;Autres certaines maladies infectieuses et parasitaires (partie restante de A00-B99)
 C00-D48;Tumeurs
 C;Tumeurs malignes (C00-C97)
-C00-C14;Tumeur maligne de la lvre, de la cavit buccale et du pharynx
+C00-C14;Tumeur maligne de la lï¿½vre, de la cavitï¿½ buccale et du pharynx
 C15;Tumeur maligne de l'oesophage
 C16;Tumeur maligne de l'estomac
-C18-C21;Tumeur maligne du c™lon, de la jonction recto-sigmo•dienne, du rectum, de l'anus et du canal anal
-C22;Tumeur maligne du foie et des voies biliaires intrahpatiques
-C25;Tumeur maligne du pancras
+C18-C21;Tumeur maligne du cï¿½lon, de la jonction recto-sigmoï¿½dienne, du rectum, de l'anus et du canal anal
+C22;Tumeur maligne du foie et des voies biliaires intrahï¿½patiques
+C25;Tumeur maligne du pancrï¿½as
 C32;Tumeur maligne du larynx
-C33_C34;Tumeur maligne de la trache et des bronches et du poumon
-C43;Mlanome malin de la peau
+C33_C34;Tumeur maligne de la trachï¿½e et des bronches et du poumon
+C43;Mï¿½lanome malin de la peau
 C50;Tumeur maligne du sein
-C53;Tumeur maligne du col de l'utrus
-C54_C55;Tumeur maligne d'autres parties de l'utrus
+C53;Tumeur maligne du col de l'utï¿½rus
+C54_C55;Tumeur maligne d'autres parties de l'utï¿½rus
 C56;Tumeur maligne de l'ovaire
 C61;Tumeur maligne de la prostate
-C64;Tumeur maligne du rein, ˆ l'exception du bassinet
+C64;Tumeur maligne du rein, ï¿½ l'exception du bassinet
 C67;Tumeur maligne de la vessie
-C70-C72;Tumeur maligne du cerveau et du systme nerveux central
-C73;Tumeur maligne de la thyro•de
+C70-C72;Tumeur maligne du cerveau et du systï¿½me nerveux central
+C73;Tumeur maligne de la thyroï¿½de
 C81-C86;Maladie de Hodgkin et lymphomes
-C88_C90_C96;Autre tumeurs malignes des tissus lympho•de, hmatopo•tique et apparents
-C91-C95;Leucmie
+C88_C90_C96;Autre tumeurs malignes des tissus lymphoï¿½de, hï¿½matopoï¿½ï¿½tique et apparentï¿½s
+C91-C95;Leucï¿½mie
 C_OTH;Autres tumeurs malignes (partie restante de C00-C97)
-D00-D48;Tumeurs non malignes (bnignes et incertaines)
-D50-D89;Maladies du sang et des organes hmatopo•tiques et certains troubles du systme immunitaire
-E;Maladies endocriniennes, nutritionnelles et mtaboliques (E00-E90)
-E10-E14;Diabte sucr
-E_OTH;Autres maladies endocriniennes, nutritionnelles et mtaboliques (partie restante de E00-E90)
+D00-D48;Tumeurs non malignes (bï¿½nignes et incertaines)
+D50-D89;Maladies du sang et des organes hï¿½matopoï¿½ï¿½tiques et certains troubles du systï¿½me immunitaire
+E;Maladies endocriniennes, nutritionnelles et mï¿½taboliques (E00-E90)
+E10-E14;Diabï¿½te sucrï¿½
+E_OTH;Autres maladies endocriniennes, nutritionnelles et mï¿½taboliques (partie restante de E00-E90)
 F;Troubles mentaux et du comportement (F00-F99)
-F01_F03;Dmence
-F10;Troubles mentaux et du comportement lis ˆ l'utilisation d'alcool
-TOXICO;Pharmacodpendance, toxicomanie (F11-F16, F18-F19)
+F01_F03;Dï¿½mence
+F10;Troubles mentaux et du comportement liï¿½s ï¿½ l'utilisation d'alcool
+TOXICO;Pharmacodï¿½pendance, toxicomanie (F11-F16, F18-F19)
 F_OTH;Autres troubles mentaux et du comportement (partie restante de F00-F99)
-G_H;Maladies du systme nerveux et des organes des sens (G00-H95)
+G_H;Maladies du systï¿½me nerveux et des organes des sens (G00-H95)
 G20;Maladie de Parkinson
 G30;Maladie d'Alzheimer
-G_H_OTH;Autres maladies du systme nerveux et des organes des sens (partie restante de G00-H95)
+G_H_OTH;Autres maladies du systï¿½me nerveux et des organes des sens (partie restante de G00-H95)
 I;Maladies de l'appareil circulatoire (I00-I99)
-I20-I25;Cardiopathies ischmiques
-I21_I22;Infarctus aigu du myocarde et infarctus du myocarde ˆ rptition
-I20_I23-I25;Autres cardiopathies ischmiques
+I20-I25;Cardiopathies ischï¿½miques
+I21_I22;Infarctus aigu du myocarde et infarctus du myocarde ï¿½ rï¿½pï¿½tition
+I20_I23-I25;Autres cardiopathies ischï¿½miques
 I30-I51;Autres maladies cardiovasculaires
-I60-I69;Maladies crbrovasculaires
+I60-I69;Maladies cï¿½rï¿½brovasculaires
 I_OTH;Autres maladies de l'appareil circulatoire (partie restante de I00-I99)
 J;Maladies de l'appareil respiratoire (J00-J99)
 J09-J11;Grippe (grippe porcine incluse)
 J12-J18;Pneumonie
-J40-J47;Maladies chroniques des voies respiratoires infrieures
-J45_J46;Asthme et tat de mal asthmatique
-J40-J44_J47;Autres maladies des voies respiratoires infrieures
-J_OTH;Autres maladie de l’appareil respiratoire (partie restante de J00-J99)
+J40-J47;Maladies chroniques des voies respiratoires infï¿½rieures
+J45_J46;Asthme et ï¿½tat de mal asthmatique
+J40-J44_J47;Autres maladies des voies respiratoires infï¿½rieures
+J_OTH;Autres maladie de lï¿½appareil respiratoire (partie restante de J00-J99)
 K;Maladies de l'appareil digestif (K00-K93)
-K25-K28;Ulcre digestif et ulcre gastro-duodnal
+K25-K28;Ulcï¿½re digestif et ulcï¿½re gastro-duodï¿½nal
 K70_K73_K74;Maladie chronique du foie
 K_OTH;Autres maladies de l'appareil digestif (partie restante de K00-K93)
-L;Maladies de la peau et du tissu cellulaire sous-cutan (L00-L99)
-M;Maladies du systme osto-articulaire, des muscles et du tissu conjonctif (M00-M99)
-RHEUM_ARTHRO;Arthrite rhumato•de et osto-arthrite (M05-M06, M15-M19)
-M_OTH;Autres maladies du systme osto-articulaire, des muscles et du tissu conjonctif (partie restante de M00-M99)
-N;Maladies de l'appareil gnito-urinaire (N00-N99)
-N00-N29;Maladies du rein et de l'uretre
-N_OTH;Autres maladies de l'appareil gnito-urinaire (partie restante de N00-N99)
-O;Complications de grossesse, accouchement et puerpralit (O00-O99)
-P;Certaines affections dont l'origine se situe dans la priode prinatale (P00-P96)
-Q;Malformations congnitales et anomalies chromosomiques (Q00-Q99)
-R;Sympt™mes, signes et rsultats anormaux d'examens cliniques et de laboratoire, non classs ailleurs (R00-R99)
+L;Maladies de la peau et du tissu cellulaire sous-cutanï¿½ (L00-L99)
+M;Maladies du systï¿½me ostï¿½o-articulaire, des muscles et du tissu conjonctif (M00-M99)
+RHEUM_ARTHRO;Arthrite rhumatoï¿½de et ostï¿½o-arthrite (M05-M06, M15-M19)
+M_OTH;Autres maladies du systï¿½me ostï¿½o-articulaire, des muscles et du tissu conjonctif (partie restante de M00-M99)
+N;Maladies de l'appareil gï¿½nito-urinaire (N00-N99)
+N00-N29;Maladies du rein et de l'uretï¿½re
+N_OTH;Autres maladies de l'appareil gï¿½nito-urinaire (partie restante de N00-N99)
+O;Complications de grossesse, accouchement et puerpï¿½ralitï¿½ (O00-O99)
+P;Certaines affections dont l'origine se situe dans la pï¿½riode pï¿½rinatale (P00-P96)
+Q;Malformations congï¿½nitales et anomalies chromosomiques (Q00-Q99)
+R;Symptï¿½mes, signes et rï¿½sultats anormaux d'examens cliniques et de laboratoire, non classï¿½s ailleurs (R00-R99)
 R95;Syndrome de la mort subite du nourrisson
-R96-R99;Causes inconnues ou non prcises de mortalit
-R_OTH;Autres sympt™mes, signes et rsultats anormaux d'examens cliniques et de laboratoire (partie restante de R00-R99)
-V01-Y89;Causes externes de morbidit et mortalit (V01-Y89)
+R96-R99;Causes inconnues ou non prï¿½cisï¿½es de mortalitï¿½
+R_OTH;Autres symptï¿½mes, signes et rï¿½sultats anormaux d'examens cliniques et de laboratoire (partie restante de R00-R99)
+V01-Y89;Causes externes de morbiditï¿½ et mortalitï¿½ (V01-Y89)
 ACC;Accidents (V01-X59, Y85, Y86)
 V_Y85;Accidents de transport (V01-V99, Y85)
 ACC_OTH;Autres accidents (W20-W64, W75-X39, X50-X59, Y86)
 W00-W19;Chutes
 W65-W74;Noyade et submersion accidentelles
 X60-X84_Y870;Suicides
-X40-X49;Intoxication accidentelle par des substances nocives et exposition ˆ ces substances
+X40-X49;Intoxication accidentelle par des substances nocives et exposition ï¿½ ces substances
 X85-Y09_Y871;Homicides
-Y10-Y34_Y872;Evnements dont l'intention n'est pas dtermine
-V01-Y89_OTH;Autres causes externes de morbidit et mortalit (partie restante de V01-Y89)
+Y10-Y34_Y872;Evï¿½nements dont l'intention n'est pas dï¿½terminï¿½e
+V01-Y89_OTH;Autres causes externes de morbiditï¿½ et mortalitï¿½ (partie restante de V01-Y89)
