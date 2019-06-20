@@ -9,15 +9,28 @@ body {
     border-style: solid;
   }
   
-  #left {
+  #top-left {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
   }
-  
-  #top_picto {
+
+  #top-right {
     display: flex;
-    background-color: white;
+    flex-direction: column;
+    justify-content: space-around;
+  }
+
+  #bottom {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+  }
+
+  #right {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
   }
   
   h1 {
@@ -34,21 +47,10 @@ body {
     justify-content: center;
   }
   
-  #map {
-  }
-  
   #legend {
       background-color: orange
   }
-  
-  #chrono {
-  }
-  
-  #right {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-  }
+ 
   
   #color_map_button {
     display: flex;
