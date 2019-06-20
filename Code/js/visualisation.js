@@ -22,6 +22,7 @@ d3.csv("data/df_fr.csv")
     // );
 
 /// ---------------------------------------------------------------------------------------
+
 var vWidth = 600;
 var vHeight = 400;
 
@@ -40,7 +41,7 @@ var g = d3.select("body")
 // create dummy data -> just one element per circle
 d3.csv("hierchie.csv", function(data){
     console.log(data);
-    data = data.sort(function(a,b){ return b.size - a.size; });
+    //data = data.sort(function(a,b){ return b.size - a.size; });
 
     var table = data;
 let view;
