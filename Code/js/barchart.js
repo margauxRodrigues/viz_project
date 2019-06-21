@@ -41,7 +41,7 @@ d3.csv("data/data_fr_new", function(data) {
     .append("rect")
     .attr("x", x(0) )
     .attr("y", function(d) { return y(d.icd10); })
-    .attr("width", function(d) { return x(d.icd10); })
+    .attr("width", function(d) { return x(d.age); })
     .attr("height", y.bandwidth() )
     .attr("fill", "#69b3a2")
 
