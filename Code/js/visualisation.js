@@ -1,35 +1,50 @@
 let dataset =[];
+
+var data;
 // ------------- LECTURE DU CSV ---------------------------
-d3.csv("data/df_fr.csv")
-    // .row( (d, i) => {
-    //     return {
-    //         sex: d.sex,
-    //         age: d.age,
-    //         geo: d.geo,
-    //         icd10: d.icd10,
-    //         y2015: +d["2015"]
-    //         // population: +d.population,
-    //         // density: +d.density
-    //     };
-    // })
-    // .get( (error, rows) => {
-    //     console.log("Loaded " + rows.length + " rows");
-    //     console.log("First row : ", rows[0])
-    //     console.log("Last row : ", rows[rows.length-1])
-    //     dataset = rows;
-    //     //draw();
-    //     }
-    // );
+d3.csv("data/data_fr_new.csv")
+.row( (d, i) => {
+    return {
+        sex: d.sex,
+        age: d.age,
+        geo: d.geo,
+        icd10: d.icd10,
+        y2015: +d["2015"]
+    };
+})
+.get( (error, rows) => {
+    console.log("Loaded " + rows.length + " rows");
+    if (rows.length > 0) {
+        console.log("First row : ", rows[0])
+        console.log("Last row : ", rows[rows.length-1])
+        data = rows;
+        // console.log(data)
+        //draw();
+    }
+});
+
+// COnstruction hiérarchie
+const levels = ["geo", "sex"]
+var hierarchy;
+
+setTimeout(function(){
+    hierarchy = flatToHierarchy(data, levels, 'icd10', 'y2015')
+    console.log(hierarchy);
+    drawViz(hierarchy)
+    drawViz2(hierarchy)
+    },5000);
+
+// ALL RIGHT DATA IS GLOBAL 
 
 /// ---------------------------------------------------------------------------------------
-
-
 
 // Prepare our physical space
 //var g = d3.select('svg').attr('width', vWidth).attr('height', vHeight).select('g');
 // set the dimensions and margins of the graph
 // var width = 500
 // var height = 500
+
+
 // ------------- ADAPTER LA TAILLE A CELLE DE LA DIV ---------------------------------------
 var parentDiv = document.getElementById("bubble")
 var containerWidth = parentDiv.clientWidth;
@@ -46,21 +61,22 @@ var g = d3.select("#bubble")
 
 // create dummy data -> just one element per circle
 d3.csv("hierchie.csv", function(data){
-    drawViz(data);
-    drawViz2(data)
+    //drawViz(data);
+    //drawViz2(data)
   });
 
   function drawViz(data) {
-      var vData = d3.stratify()
-          .id(function(d) { return d.id; })
-          .parentId(function(d) { return d.parentId; })(data);
-      // Declare d3 layout
+    //   var vData = d3.stratify()
+    //       .id(function(d) { return d.id; })
+    //       .parentId(function(d) { return d.parentId; })(data);
+    //   // Declare d3 layout
+      var vRoot = data;
       var vLayout = d3.pack().size([vWidth, vHeight]);
-      // Layout + Data
-      var vRoot = d3.hierarchy(vData).sum(function (d) { return d.data["2015"]; });
+    //   // Layout + Data
+    //   var vRoot = d3.hierarchy(vData).sum(function (d) { return d.data["2015"]; });
       var vNodes = vRoot.descendants();
       vLayout(vRoot);
-      console.log(vNodes)
+      //console.log(vNodes)
       var vSlices = g.selectAll('circle').data(vNodes).enter().append('circle');
 
       // Draw on screen
@@ -91,7 +107,7 @@ d3.csv("hierchie.csv", function(data){
         //.join("text")
           .style("fill-opacity", d => d.parent === vRoot ? 1 : 0)
           .style("display", d => d.parent === vRoot ? "inline" : "none")
-          .text(d => d.data.id)
+          .text(d => d.data.name)
   }
 
 
@@ -126,15 +142,15 @@ var g1 = d3.select("#sunburst")
 
 
 function drawViz2(data) {
-    var vData = d3.stratify()
-        .id(function(d) { return d.id; })
-        .parentId(function(d) { return d.parentId; })(data);
+    // var vData = d3.stratify()
+    //     .id(function(d) { return d.id; })
+    //     .parentId(function(d) { return d.parentId; })(data);
     var partition = d3.partition()
-        .size([2 * Math.PI, radius]);
+        .size([2 * Math.PI, radius]);   
 
-    var root = d3.hierarchy(vData)
-        .sum(function (d) { return d.data['2015']});
-
+    // var root = d3.hierarchy(vData)
+    //     .sum(function (d) { return d.data['2015']});
+    var root = data
     partition(root);
 
     var arc = d3.arc()
@@ -157,7 +173,7 @@ function drawViz2(data) {
             return "translate(" + arc.centroid(d) + ")rotate(" + computeTextRotation(d) + ")"; })
         .attr("dx", "-20") // radius margin
         .attr("dy", ".5em") // rotation align
-        .text(function(d) { return d.parent ? d.data.id : "" });
+        .text(function(d) { return d.parent ? d.data.name : "" });
 }
 
 
@@ -170,3 +186,37 @@ function computeTextRotation(d) {
 }
 
 
+function flatToHierarchy(flatData, levels, nameField, countField) {
+    // Adapted from https://stackoverflow.com/a/19317823
+    var nestedData = { name :"root", children : [] }
+    
+    // For each data row, loop through the expected levels traversing the output tree
+    flatData.forEach(function(d){
+        // Keep this as a reference to the current level
+        var depthCursor = nestedData.children;
+        // Go down one level at a time
+        levels.forEach(function( property, depth ){
+  
+            // See if a branch has already been created
+            var index;
+            depthCursor.forEach(function(child,i){
+                if ( d[property] == child.name ) index = i;
+            });
+            // Add a branch if it isn't there
+            if ( isNaN(index) ) {
+                depthCursor.push({ name : d[property], children : []});
+                index = depthCursor.length - 1;
+            }
+            // Reference the new child array as we go deeper into the tree
+            depthCursor = depthCursor[index].children;
+            // This is a leaf, so add last element to specified branch
+            if ( depth === levels.length - 1 ) {
+              depthCursor.push({
+                'name':d[nameField],
+                'count':+d[countField]
+              });
+            } 
+        })
+    })
+    return d3.hierarchy(nestedData).sum(function(d){ return d.count; })
+}
