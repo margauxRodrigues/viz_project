@@ -1,26 +1,25 @@
-// set the dimensions and margins of the graph
-var margin = {top: 20, right: 30, bottom: 40, left: 90},
-    width = 460 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom;
+var parentDiv = document.getElementById("barchart")
+var containerWidth = parentDiv.clientWidth;
+var containerHeight = parentDiv.clientHeight;
+var vWidth = containerWidth;
+var vHeight = containerHeight;
 
 // append the svg object to the body of the page
 var svg = d3.select("#barchart")
   .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform",
-          "translate(" + margin.left + "," + margin.top + ")");
+    .attr("width", containerWidth )
+    .attr("height", containerHeight)
+  .append("g");
 
 // Parse the Data
-d3.csv("data/data_fr_new", function(data) {
+d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/7_OneCatOneNum_header.csv", function(data) {
 
   // Add X axis
   var x = d3.scaleLinear()
     .domain([0, 13000])
     .range([ 0, width]);
   svg.append("g")
-    .attr("transform", "translate(0," + height + ")")
+    .attr("transform", "translate(0," + containerHeight + ")")
     .call(d3.axisBottom(x))
     .selectAll("text")
       .attr("transform", "translate(-10,0)rotate(-45)")
@@ -28,8 +27,8 @@ d3.csv("data/data_fr_new", function(data) {
 
   // Y axis
   var y = d3.scaleBand()
-    .range([ 0, height ])
-    .domain(data.map(function(d) { return d.icd10; }))
+    .range([ 0, containerHeight ])
+    .domain(data.map(function(d) { return d.Country; }))
     .padding(.1);
   svg.append("g")
     .call(d3.axisLeft(y))
@@ -40,8 +39,8 @@ d3.csv("data/data_fr_new", function(data) {
     .enter()
     .append("rect")
     .attr("x", x(0) )
-    .attr("y", function(d) { return y(d.icd10); })
-    .attr("width", function(d) { return x(d.age); })
+    .attr("y", function(d) { return y(d.Country); })
+    .attr("width", function(d) { return x(d.Value); })
     .attr("height", y.bandwidth() )
     .attr("fill", "#69b3a2")
 

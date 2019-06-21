@@ -31,25 +31,21 @@ body {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    background-color: rgb(0, 60, 255)
   }
   #sunburst {
     display: flex;
     justify-content: space-around;
-    background-color: rgb(255, 0, 0)
   }
 
   #france {
     display: flex;
     justify-content: space-around;
-    background-color: rgb(43, 255, 0)
   }
 
   #bottom {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    background-color: rgb(255, 251, 0)
   }
 
   #bubble {
