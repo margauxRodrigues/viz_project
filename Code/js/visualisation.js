@@ -105,8 +105,8 @@ var nodeData = {
     }]
 };
 
-var width = 500;
-var height = 500;
+var width = auto;
+var height = auto;
 var radius = Math.min(width, height) / 2;
 var color = d3.scaleOrdinal(d3.schemeCategory20b);
 
