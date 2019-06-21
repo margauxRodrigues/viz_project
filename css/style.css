@@ -20,6 +20,13 @@ body {
     background-color: rgb(247, 0, 255)
   }
 
+  #center {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    background-color: rgb(17, 0, 255)
+  }
+  
   #top {
     display: flex;
     flex-direction: row;
