@@ -23,21 +23,26 @@ d3.csv("data/df_fr.csv")
 
 /// ---------------------------------------------------------------------------------------
 
-var vWidth = 600;
-var vHeight = 400;
+
 
 // Prepare our physical space
 //var g = d3.select('svg').attr('width', vWidth).attr('height', vHeight).select('g');
 // set the dimensions and margins of the graph
-var width = 500
-var height = 500
-
+// var width = 500
+// var height = 500
+// ------------- ADAPTER LA TAILLE A CELLE DE LA DIV ---------------------------------------
+var parentDiv = document.getElementById("bubble")
+var containerWidth = parentDiv.clientWidth;
+var containerHeight = parentDiv.clientHeight;
+var vWidth = containerWidth;
+var vHeight = containerHeight;
 // append the svg object to the body of the page
 var g = d3.select("#bubble")
     .append("svg")
-    .attr("width", width)
-    .attr("height", height)
+    .attr("width", containerWidth)
+    .attr("height", containerHeight)
     .append("g")
+
 
 // create dummy data -> just one element per circle
 d3.csv("hierchie.csv", function(data){
@@ -105,8 +110,9 @@ var nodeData = {
     }]
 };
 
-var width = auto;
-var height = auto;
+var parentDiv = document.getElementById("sunburst")
+var width = parentDiv.clientWidth;
+var height = parentDiv.clientHeight;
 var radius = Math.min(width, height) / 2;
 var color = d3.scaleOrdinal(d3.schemeCategory20b);
 
@@ -162,3 +168,5 @@ function computeTextRotation(d) {
     return (angle < 120 || angle > 270) ? angle : angle + 180;  // labels as rims
     //return (angle < 180) ? angle - 90 : angle + 90;  // labels as spokes
 }
+
+
