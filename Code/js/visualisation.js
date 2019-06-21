@@ -1,25 +1,33 @@
 let dataset =[];
+
+var data;
 // ------------- LECTURE DU CSV ---------------------------
 d3.csv("data/df_fr.csv")
-    // .row( (d, i) => {
-    //     return {
-    //         sex: d.sex,
-    //         age: d.age,
-    //         geo: d.geo,
-    //         icd10: d.icd10,
-    //         y2015: +d["2015"]
-    //         // population: +d.population,
-    //         // density: +d.density
-    //     };
-    // })
-    // .get( (error, rows) => {
-    //     console.log("Loaded " + rows.length + " rows");
-    //     console.log("First row : ", rows[0])
-    //     console.log("Last row : ", rows[rows.length-1])
-    //     dataset = rows;
-    //     //draw();
-    //     }
-    // );
+.row( (d, i) => {
+    return {
+        sex: d.sex,
+        age: d.age,
+        geo: d.geo,
+        icd10: d.icd10,
+        y2015: +d["2015"]
+    };
+})
+.get( (error, rows) => {
+    console.log("Loaded " + rows.length + " rows");
+    if (rows.length > 0) {
+        console.log("First row : ", rows[0])
+        console.log("Last row : ", rows[rows.length-1])
+        data = rows;
+        console.log(data)
+        //draw();
+    }
+});
+
+setTimeout(function(){
+    console.log(data);
+    },5000);
+
+// ALL RIGHT DATA IS GLOBAL 
 
 /// ---------------------------------------------------------------------------------------
 
@@ -30,6 +38,8 @@ d3.csv("data/df_fr.csv")
 // set the dimensions and margins of the graph
 // var width = 500
 // var height = 500
+
+
 // ------------- ADAPTER LA TAILLE A CELLE DE LA DIV ---------------------------------------
 var parentDiv = document.getElementById("bubble")
 var containerWidth = parentDiv.clientWidth;
