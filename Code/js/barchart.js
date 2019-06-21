@@ -1,4 +1,4 @@
-var parentDiv = document.getElementById("main")
+var parentDiv = document.getElementById("barchart")
 var containerWidth = parentDiv.clientWidth;
 var containerHeight = parentDiv.clientHeight;
 var vWidth = containerWidth;
@@ -8,10 +8,10 @@ console.log(containerHeight)
 // append the svg object to the body of the page
 var svg = d3.select("#barchart")
   .append("svg")
-    .attr("width", containerWidth - 10 )
-    .attr("height", containerHeight - 10)
+    .attr("width", containerWidth )
+    .attr("height", containerHeight)
   .append("g")
-    .attr("height",  containerHeight - 10 )
+    .attr("height",  containerHeight )
     .attr("transform", "translate(20,5)");
 
 // Parse the Data
@@ -19,7 +19,7 @@ d3.csv("data/data_fr_new.csv", function(data) {
 
   // Add X axis
   var x = d3.scaleLinear()
-    .domain([0, d3.max(data, function(d){ return d['2014']; })])
+    .domain([0, d3.max(data, function(d){ return d['2014'] + 20 ; })])
     .range([ 0, 280]);
   svg.append("g")
     .call(d3.axisBottom(x))
