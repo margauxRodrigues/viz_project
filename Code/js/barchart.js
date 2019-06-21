@@ -1,49 +1,52 @@
-// set the dimensions and margins of the graph
-var margin = {top: 20, right: 30, bottom: 40, left: 90},
-    width = 460 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom;
+var parentDiv = document.getElementById("main")
+var containerWidth = parentDiv.clientWidth;
+var containerHeight = parentDiv.clientHeight;
+var vWidth = containerWidth;
+var vHeight = containerHeight;
+console.log(containerHeight)
 
 // append the svg object to the body of the page
 var svg = d3.select("#barchart")
   .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
+    .attr("width", containerWidth - 10 )
+    .attr("height", containerHeight - 10)
   .append("g")
-    .attr("transform",
-          "translate(" + margin.left + "," + margin.top + ")");
+    .attr("height",  containerHeight - 10 )
+    .attr("transform", "translate(20,5)");
 
 // Parse the Data
-d3.csv("data/data_fr_new", function(data) {
+d3.csv("data/data_fr_new.csv", function(data) {
 
   // Add X axis
   var x = d3.scaleLinear()
-    .domain([0, 13000])
-    .range([ 0, width]);
+    .domain([0, d3.max(data, function(d){ return d['2014']; })])
+    .range([ 0, 280]);
   svg.append("g")
-    .attr("transform", "translate(0," + height + ")")
     .call(d3.axisBottom(x))
     .selectAll("text")
       .attr("transform", "translate(-10,0)rotate(-45)")
       .style("text-anchor", "end");
 
   // Y axis
+  console.log(d3.max(data, function(d){ return d['2014']; }))
   var y = d3.scaleBand()
-    .range([ 0, height ])
-    .domain(data.map(function(d) { return d.icd10; }))
-    .padding(.1);
+    .domain(data.map(function(d) { return d.age; }))
+    .range([ 0, containerHeight ])
+    .padding(.5);
   svg.append("g")
     .call(d3.axisLeft(y))
-
+  console.log(y.bandwidth())
   //Bars
   svg.selectAll("myRect")
     .data(data)
     .enter()
     .append("rect")
+    .attr("transform", "translate(0," + 35 + ")")
     .attr("x", x(0) )
-    .attr("y", function(d) { return y(d.icd10); })
-    .attr("width", function(d) { return x(d.icd10); })
+    .attr("y", function(d) { return y(d.age); })
+    .attr("width", function(d) { return x(d['2014']); })
     .attr("height", y.bandwidth() )
-    .attr("fill", "#69b3a2")
+    .attr("fill", "#666")
 
 
     // .attr("x", function(d) { return x(d.Country); })
