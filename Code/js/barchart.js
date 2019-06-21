@@ -1,48 +1,52 @@
-var parentDiv = document.getElementById("barchart")
+var parentDiv = document.getElementById("main")
 var containerWidth = parentDiv.clientWidth;
 var containerHeight = parentDiv.clientHeight;
 var vWidth = containerWidth;
 var vHeight = containerHeight;
+console.log(containerHeight)
 
 // append the svg object to the body of the page
 var svg = d3.select("#barchart")
   .append("svg")
-    .attr("width", containerWidth )
-    .attr("height", containerHeight)
-  .append("g");
+    .attr("width", containerWidth - 10 )
+    .attr("height", containerHeight - 10)
+  .append("g")
+    .attr("height",  containerHeight - 10 )
+    .attr("transform", "translate(20,5)");
 
 // Parse the Data
-d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/7_OneCatOneNum_header.csv", function(data) {
+d3.csv("data/data_fr_new.csv", function(data) {
 
   // Add X axis
   var x = d3.scaleLinear()
-    .domain([0, 13000])
-    .range([ 0, width]);
+    .domain([0, d3.max(data, function(d){ return d['2014']; })])
+    .range([ 0, 280]);
   svg.append("g")
-    .attr("transform", "translate(0," + containerHeight + ")")
     .call(d3.axisBottom(x))
     .selectAll("text")
       .attr("transform", "translate(-10,0)rotate(-45)")
       .style("text-anchor", "end");
 
   // Y axis
+  console.log(d3.max(data, function(d){ return d['2014']; }))
   var y = d3.scaleBand()
+    .domain(data.map(function(d) { return d.age; }))
     .range([ 0, containerHeight ])
-    .domain(data.map(function(d) { return d.Country; }))
-    .padding(.1);
+    .padding(.5);
   svg.append("g")
     .call(d3.axisLeft(y))
-
+  console.log(y.bandwidth())
   //Bars
   svg.selectAll("myRect")
     .data(data)
     .enter()
     .append("rect")
+    .attr("transform", "translate(0," + 35 + ")")
     .attr("x", x(0) )
-    .attr("y", function(d) { return y(d.Country); })
-    .attr("width", function(d) { return x(d.Value); })
+    .attr("y", function(d) { return y(d.age); })
+    .attr("width", function(d) { return x(d['2014']); })
     .attr("height", y.bandwidth() )
-    .attr("fill", "#69b3a2")
+    .attr("fill", "#666")
 
 
     // .attr("x", function(d) { return x(d.Country); })
