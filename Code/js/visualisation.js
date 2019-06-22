@@ -25,10 +25,15 @@ d3.csv("data/data_fr_new.csv")
 
 // COnstruction hiérarchie
 const levels = ["geo", "sex"]
+const filtres = ["FR20", "FR30"]
 var hierarchy;
 
 setTimeout(function(){
-    hierarchy = flatToHierarchy(data, levels, 'icd10', 'y2015')
+    var test = data.filter(function(row){
+        return (row["sex"] !== "T") && (row["geo"]!=="FR") && (filtres.indexOf(row["geo"]) !== -1);
+      }); 
+    
+    hierarchy = flatToHierarchy(test, levels, 'icd10', 'y2015')
     console.log(hierarchy);
     drawViz(hierarchy)
     drawViz2(hierarchy)
