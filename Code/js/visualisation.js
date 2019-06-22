@@ -62,6 +62,7 @@ var g = d3.select("#bubble")
     .attr("width", containerWidth)
     .attr("height", containerHeight)
     .append("g")
+    .attr("viewBox", `-${vWidth / 2} -${vHeight / 2} ${vWidth} ${vHeight}`)
     .attr('transform', 'translate(' + vWidth / 2 + ',' + vHeight / 2 + ')')
 
 function drawViz(data) {
@@ -217,6 +218,7 @@ function flatToHierarchy(flatData, levels, nameField, countField) {
 }
 
 function zoomTo(v) {
+    console.log(v)
     const k = vWidth / v[2];
     view = v;
 
