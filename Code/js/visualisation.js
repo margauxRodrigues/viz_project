@@ -1,7 +1,9 @@
 let dataset =[];
-
+var focus;
 var data;
-let view;
+var view;
+var label;
+var vSlices;
 // ------------- LECTURE DU CSV ---------------------------
 d3.csv("data/data_fr_new.csv")
 .row( (d, i) => {
@@ -35,7 +37,13 @@ setTimeout(function(){
       }); 
     
     hierarchy = flatToHierarchy(test, levels, 'icd10', 'y2015')
-    console.log(hierarchy);
+    focus = hierarchy;
+    //console.log(d3.pack(hierarchy))
+    g.on("click", function(){
+        console.log('Click');
+        zoom(hierarchy);
+    });
+
     drawViz(hierarchy)
     drawViz2(hierarchy)
     },5000);
@@ -54,83 +62,52 @@ var g = d3.select("#bubble")
     .attr("width", containerWidth)
     .attr("height", containerHeight)
     .append("g")
+    .attr('transform', 'translate(' + vWidth / 2 + ',' + vHeight / 2 + ')')
 
-  function drawViz(data) {
-    //   // Declare d3 layout
-      let focus = data;
-      var vRoot = data;
-      var vLayout = d3.pack().size([vWidth, vHeight]);
-    //   // Layout + Data
-      var vNodes = vRoot.descendants().slice(1);
-      vLayout(vRoot);
-      var vSlices = g.selectAll('circle').data(vNodes).enter().append('circle');
+function drawViz(data) {
+//   // Declare d3 layout
+    var vRoot = data;
+    var vLayout = d3.pack();
+    //.size([vWidth, vHeight]);
+//   // Layout + Data
 
-      // Draw on screen
-      vSlices.attr('cx', function (d) { return d.x; })
-          .attr('cy', function (d) { return d.y; })
-          .attr('r', function (d) { return d.r; })
-          .style("fill-opacity", "0.1")
-          .attr("pointer-events", d => !d.children ? "none" : null)
-          .on("mouseover", function() { d3.select(this).attr("stroke", "#000"); })
-          .on("mouseout", function() { d3.select(this).attr("stroke", null); })
-          .on("click", d => focus !== d && (zoom(d), d3.event.stopPropagation()));
+    var vNodes = vRoot.descendants().slice(1);
+    vLayout(vRoot);
+    vSlices = g.selectAll('circle').data(vNodes).enter().append('circle');
 
-      var label =
-        g.selectAll('text')
-        .data(vNodes)
-        .enter()
-        .append('svg:text')
-        .attr('x', function (d) {
-            return d.x;
-        })
-        .attr('y', function (d) {
-            return d.y;
-        })
-        // sets the horizontal alignment to the middle
-        .attr('text-anchor', "middle")
-        // sets the vertical alignment to the middle of the line
-        .attr('dy', '0.35em')
-        //.join("text")
-          .style("fill-opacity", d => d.parent === vRoot ? 1 : 0)
-          .style("display", d => d.parent === vRoot ? "inline" : "none")
-          .text(d => d.data.name)
-        console.log(vRoot.x)
-        console.log(vRoot.y)
-        console.log(vRoot.r)
-        zoomTo([vRoot.x, vRoot.y, vRoot.r * 2]);
+    // Draw on screen
+    vSlices.attr('cx', function (d) { return d.x; })
+        .attr('cy', function (d) { return d.y; })
+        .attr('r', function (d) { return d.r; })
+        .style("fill-opacity", "0.1")
+        .attr("pointer-events", d => !d.children ? "none" : null)
+        .on("mouseover", function() { d3.select(this).attr("stroke", "#000"); })
+        .on("mouseout", function() { d3.select(this).attr("stroke", null); })
+        .on("click", d => focus !== d && (zoom(d), d3.event.stopPropagation()));
 
-        function zoomTo(v) {
-            console.log(v)
-        
-            const k = vWidth / v[2];
-            view = v;
-        
-            label.attr("transform", d => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k})`);
-            vSlices.attr("transform", d => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k})`);
-            vSlices.attr("r", d => d.r * k);
-          }
-        
-        function zoom(d) {
-            const focus0 = focus;
-        
-            focus = d;
-        
-            const transition = svg.transition()
-                .duration(d3.event.altKey ? 7500 : 750)
-                .tween("zoom", d => {
-                  const i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r * 2]);
-                  return t => zoomTo(i(t));
-                });
-        
-            label
-              .filter(function(d) { return d.parent === focus || this.style.display === "inline"; })
-              .transition(transition)
-                .style("fill-opacity", d => d.parent === focus ? 1 : 0)
-                .on("start", function(d) { if (d.parent === focus) this.style.display = "inline"; })
-                .on("end", function(d) { if (d.parent !== focus) this.style.display = "none"; });
-          }
-        
-  }
+    label =
+    g.selectAll('text')
+    .data(vNodes)
+    .enter()
+    .append('svg:text')
+    .attr('x', function (d) {
+        return d.x;
+    })
+    .attr('y', function (d) {
+        return d.y;
+    })
+    // sets the horizontal alignment to the middle
+    .attr('text-anchor', "middle")
+    // sets the vertical alignment to the middle of the line
+    .attr('dy', '0.35em')
+    //.join("text")
+        .style("fill-opacity", d => d.parent === vRoot ? 1 : 0)
+        .style("display", d => d.parent === vRoot ? "inline" : "none")
+        .text(d => d.data.name)
+    zoomTo([vRoot.x, vRoot.y, vRoot.r * 2]);
+
+
+}
 
 var nodeData = {
     "name": "TOPICS", "children": [{
@@ -239,3 +216,30 @@ function flatToHierarchy(flatData, levels, nameField, countField) {
     return d3.hierarchy(nestedData).sum(function(d){ return d.count; })
 }
 
+function zoomTo(v) {
+    const k = vWidth / v[2];
+    view = v;
+
+    label.attr("transform", d => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k})`);
+    vSlices.attr("transform", d => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k})`);
+    vSlices.attr("r", d => d.r * k);
+    }
+
+function zoom(d) {
+    console.log(d)
+    const focus0 = focus;
+    focus = d;
+    const transition = svg.transition()
+        .duration(d3.event.altKey ? 7500 : 750)
+        .tween("zoom", d => {
+            const i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r]);
+            return t => zoomTo(i(t));
+        });
+
+    label
+        .filter(function(d) { return d.parent === focus || this.style.display === "inline"; })
+        .transition(transition)
+        .style("fill-opacity", d => d.parent === focus ? 1 : 0)
+        .on("start", function(d) { if (d.parent === focus) this.style.display = "inline"; })
+        .on("end", function(d) { if (d.parent !== focus) this.style.display = "none"; });
+    }
