@@ -15,11 +15,21 @@ var svg = d3.select("#barchart")
     .attr("transform", "translate(20,5)");
 
 // Parse the Data
-d3.csv("data/data_fr_new.csv", function(data) {
+d3.json("data/data_fr.csv", function(data) {
+  data.forEach(function(d) {
+    d.geo_niv_0 = d.geo_niv_0;
+    d.geo_niv_1 = d.geo_niv_1;
+    d.icd10_niv_0 = d.icd10_niv_0;
+    d.icd10_niv_1 = d.icd10_niv_1;
+    d.icd10_niv_2 = d.icd10_niv_2;
+    d.y2015 = +d["2015"];
+});
 
+
+ 
   // Add X axis
   var x = d3.scaleLinear()
-    .domain([0, d3.max(data, function(d){ return d['2014'] + 20 ; })])
+    .domain([0, d3.max(data, function(d){ return d.y2015 + 20 ; })])
     .range([ 0, 280]);
   svg.append("g")
     .call(d3.axisBottom(x))
@@ -28,9 +38,9 @@ d3.csv("data/data_fr_new.csv", function(data) {
       .style("text-anchor", "end");
 
   // Y axis
-  console.log(d3.max(data, function(d){ return d['2014']; }))
+  console.log(d3.max(data, function(d){ return d.y2015; }))
   var y = d3.scaleBand()
-    .domain(data.map(function(d) { return d.age; }))
+    .domain(data.map(function(d) { return d.icd10_niv_2; }))
     .range([ 0, containerHeight ])
     .padding(.5);
   svg.append("g")
@@ -40,11 +50,14 @@ d3.csv("data/data_fr_new.csv", function(data) {
   svg.selectAll("myRect")
     .data(data)
     .enter()
+    .selectAll("text")
+      .attr("transform", "translate(10,0)")
+      .style("text-anchor", "end")
     .append("rect")
     .attr("transform", "translate(0," + 35 + ")")
     .attr("x", x(0) )
-    .attr("y", function(d) { return y(d.age); })
-    .attr("width", function(d) { return x(d['2014']); })
+    .attr("y", function(d) { return y(d.icd10_niv_2); })
+    .attr("width", function(d) { return x(d.y2015); })
     .attr("height", y.bandwidth() )
     .attr("fill", "#666")
 
