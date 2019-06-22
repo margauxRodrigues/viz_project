@@ -1,6 +1,7 @@
 let dataset =[];
 
 var data;
+let view;
 // ------------- LECTURE DU CSV ---------------------------
 d3.csv("data/data_fr_new.csv")
 .row( (d, i) => {
@@ -25,7 +26,7 @@ d3.csv("data/data_fr_new.csv")
 
 // COnstruction hiérarchie
 const levels = ["geo", "sex"]
-const filtres = ["FR20", "FR30"]
+const filtres = ["FR10", "FR30"]
 var hierarchy;
 
 setTimeout(function(){
@@ -41,15 +42,6 @@ setTimeout(function(){
 
 // ALL RIGHT DATA IS GLOBAL 
 
-/// ---------------------------------------------------------------------------------------
-
-// Prepare our physical space
-//var g = d3.select('svg').attr('width', vWidth).attr('height', vHeight).select('g');
-// set the dimensions and margins of the graph
-// var width = 500
-// var height = 500
-
-
 // ------------- ADAPTER LA TAILLE A CELLE DE LA DIV ---------------------------------------
 var parentDiv = document.getElementById("bubble")
 var containerWidth = parentDiv.clientWidth;
@@ -63,25 +55,14 @@ var g = d3.select("#bubble")
     .attr("height", containerHeight)
     .append("g")
 
-
-// create dummy data -> just one element per circle
-d3.csv("hierchie.csv", function(data){
-    //drawViz(data);
-    //drawViz2(data)
-  });
-
   function drawViz(data) {
-    //   var vData = d3.stratify()
-    //       .id(function(d) { return d.id; })
-    //       .parentId(function(d) { return d.parentId; })(data);
     //   // Declare d3 layout
+      let focus = data;
       var vRoot = data;
       var vLayout = d3.pack().size([vWidth, vHeight]);
     //   // Layout + Data
-    //   var vRoot = d3.hierarchy(vData).sum(function (d) { return d.data["2015"]; });
-      var vNodes = vRoot.descendants();
+      var vNodes = vRoot.descendants().slice(1);
       vLayout(vRoot);
-      //console.log(vNodes)
       var vSlices = g.selectAll('circle').data(vNodes).enter().append('circle');
 
       // Draw on screen
@@ -113,9 +94,43 @@ d3.csv("hierchie.csv", function(data){
           .style("fill-opacity", d => d.parent === vRoot ? 1 : 0)
           .style("display", d => d.parent === vRoot ? "inline" : "none")
           .text(d => d.data.name)
+        console.log(vRoot.x)
+        console.log(vRoot.y)
+        console.log(vRoot.r)
+        zoomTo([vRoot.x, vRoot.y, vRoot.r * 2]);
+
+        function zoomTo(v) {
+            console.log(v)
+        
+            const k = vWidth / v[2];
+            view = v;
+        
+            label.attr("transform", d => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k})`);
+            vSlices.attr("transform", d => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k})`);
+            vSlices.attr("r", d => d.r * k);
+          }
+        
+        function zoom(d) {
+            const focus0 = focus;
+        
+            focus = d;
+        
+            const transition = svg.transition()
+                .duration(d3.event.altKey ? 7500 : 750)
+                .tween("zoom", d => {
+                  const i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r * 2]);
+                  return t => zoomTo(i(t));
+                });
+        
+            label
+              .filter(function(d) { return d.parent === focus || this.style.display === "inline"; })
+              .transition(transition)
+                .style("fill-opacity", d => d.parent === focus ? 1 : 0)
+                .on("start", function(d) { if (d.parent === focus) this.style.display = "inline"; })
+                .on("end", function(d) { if (d.parent !== focus) this.style.display = "none"; });
+          }
+        
   }
-
-
 
 var nodeData = {
     "name": "TOPICS", "children": [{
@@ -181,7 +196,6 @@ function drawViz2(data) {
         .text(function(d) { return d.parent ? d.data.name : "" });
 }
 
-
 function computeTextRotation(d) {
     var angle = (d.x0 + d.x1) / Math.PI * 90;
 
@@ -189,7 +203,6 @@ function computeTextRotation(d) {
     return (angle < 120 || angle > 270) ? angle : angle + 180;  // labels as rims
     //return (angle < 180) ? angle - 90 : angle + 90;  // labels as spokes
 }
-
 
 function flatToHierarchy(flatData, levels, nameField, countField) {
     // Adapted from https://stackoverflow.com/a/19317823
@@ -225,3 +238,4 @@ function flatToHierarchy(flatData, levels, nameField, countField) {
     })
     return d3.hierarchy(nestedData).sum(function(d){ return d.count; })
 }
+
