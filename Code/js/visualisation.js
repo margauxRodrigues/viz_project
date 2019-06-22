@@ -4,6 +4,8 @@ var data;
 var view;
 var label;
 var vSlices;
+var subset;
+
 // ------------- LECTURE DU CSV ---------------------------
 d3.csv("data/data_fr.csv")
 .row( (d, i) => {
@@ -12,11 +14,10 @@ d3.csv("data/data_fr.csv")
         age: d.age,
         geo0: d.geo_niv_0,
         geo1: d.geo_niv_1,
-        geo2: d.geo_niv_2,
+        //geo2: d.geo_niv_2,
         icd10_0: d.icd10_niv_0,
         icd10_1: d.icd10_niv_1,
         icd10_2: d.icd10_niv_2,
-        icd10_3: d.icd10_niv_3,
         maladies:d.maladies,
         region:d.region,
         y2015: +d["2015"]
@@ -35,14 +36,14 @@ d3.csv("data/data_fr.csv")
 
 // COnstruction hiérarchie
 const levels_bubble = ["region", "sex"]
-const filtres_bubble = ["FR10", "FR30", "FR26"]
+const filtres_bubble = ["Basse-Normandie (NUTS 2013)", "Auvergne (NUTS 2013)", "Nord - Pas-de-Calais (NUTS 2013)"]
 const levels_sunburst = ["icd10_1", "icd10_2"]
 var hierarchy_bubble;
 var hierarchy_sunburst;
 
 setTimeout(function(){
     var filt_data_bubble = data.filter(function(row){
-        return (row["sex"] !== "T") && (row["geo2"]!=="FR") && (filtres_bubble.indexOf(row["geo2"]) !== -1);
+        return (row["sex"] !== "T") && (row["region"]!=="FR") && (filtres_bubble.indexOf(row["region"]) !== -1);
       }); 
     
     hierarchy_bubble = flatToHierarchyBubble(filt_data_bubble, levels_bubble, 'maladies', 'y2015')
@@ -53,7 +54,7 @@ setTimeout(function(){
     g.on("click", function(){
         zoom(hierarchy_bubble);
     });
-    console.log(hierarchy_sunburst)
+            console.log(hierarchy_sunburst)
     drawViz(hierarchy_bubble)
     drawViz2(hierarchy_sunburst)
     },30000);
@@ -81,10 +82,12 @@ function drawViz(data) {
     var vLayout = d3.pack();
     //.size([vWidth, vHeight]);
 //   // Layout + Data
-
     var vNodes = vRoot.descendants().slice(1);
     vLayout(vRoot);
-    vSlices = g.selectAll('circle').data(vNodes).enter().append('circle');
+    vSlices = g.selectAll('circle')
+        .data(vNodes)
+        .enter()
+        .append('circle');
 
     // Draw on screen
     vSlices.attr('cx', function (d) { return d.x; })
@@ -94,7 +97,6 @@ function drawViz(data) {
         //.attr("pointer-events", d => !d.children ? "none" : null)
         .on("mouseover", function() { 
             d3.select(this).attr("stroke", "#000"); 
-            console.log(this);
             //label.style("display", d => d.parent === focus ? "inline" : "none");
 
             //d3.select(this.label).style("display", d => d.parent === vRoot ? "inline" : "none")
@@ -128,6 +130,9 @@ function drawViz(data) {
         .style("display", "none")
         .text(d => d.data.name)
     zoomTo([vRoot.x, vRoot.y, vRoot.r * 2]);
+    vSlices.transition()
+    vSlices.exit().remove()
+    
 }
 
 function showtext(d){
@@ -188,17 +193,25 @@ function drawViz2(data) {
         .attr("display", function (d) { return d.depth ? null : "none"; })
         .attr("d", arc)
         .style('stroke', '#fff')
-        .style("fill", function (d) { return color((d.children ? d : d.parent).data.name); });
+        .style("fill", function (d) { return color((d.children ? d : d.parent).data.name); })
 
-    g1.selectAll(".node")
+    var slices = g1.selectAll("node")
         .append("text")
         .attr("transform", function(d) {
             return "translate(" + arc.centroid(d) + ")rotate(" + computeTextRotation(d) + ")"; })
         .attr("dx", "-20") // radius margin
         .attr("dy", ".5em") // rotation align
         .style("display", d => d.parent === root ? "inline" : "none")
+        .text(function(d) { return d.parent ? d.data.print : "" })
+        
+        var slice = g1.selectAll('g.node').data(root.descendants(), function(d) { return d.data.name; }); // .enter().append('g').attr("class", "node");
+        newSlice = slice.enter().append('g').attr("class", "node").merge(slice);
+        slice.exit().remove();
 
-        .text(function(d) { return d.parent ? d.data.print : "" });
+        slice.selectAll('text').remove();
+
+        newSlice.on("click", highlightSelectedSlice);
+
 }
 
 function computeTextRotation(d) {
@@ -311,3 +324,20 @@ function zoom(d) {
         .on("start", function(d) { if (d.parent === focus) this.style.display = "inline"; })
         .on("end", function(d) { if (d.parent !== focus) this.style.display = "none"; });
     }
+function highlightSelectedSlice(c,i) {
+
+        clicked = c;
+        console.log(clicked);
+        subset = clicked.data.name
+        console.log("Function called");
+        var filtres_bubble_maladie = subset;
+
+        if (clicked.height == 1 ){
+        var filt_data_bubble = data.filter(function(row){
+            return (row["sex"] !== "T") && (row["region"]!=="FR") && (filtres_bubble.indexOf(row["region"]) !== -1) && (filtres_bubble_maladie.indexOf(row['icd10_2']) !== -1);
+            }); 
+
+            hierarchy_bubble = flatToHierarchyBubble(filt_data_bubble, levels_bubble, 'maladies', 'y2015')
+            drawViz(hierarchy_bubble)
+        }
+    };
