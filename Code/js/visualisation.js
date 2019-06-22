@@ -229,12 +229,14 @@ function zoomTo(v) {
 
 function zoom(d) {
     console.log(d)
+    g.attr("viewBox", `-${vWidth / 2} -${vHeight / 2} ${vWidth} ${vHeight}`)
+
     const focus0 = focus;
     focus = d;
     const transition = svg.transition()
         .duration(d3.event.altKey ? 7500 : 750)
         .tween("zoom", d => {
-            const i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r]);
+            const i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r*2]);
             return t => zoomTo(i(t));
         });
 
