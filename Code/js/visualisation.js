@@ -1,6 +1,9 @@
 let dataset =[];
-
+var focus;
 var data;
+var view;
+var label;
+var vSlices;
 // ------------- LECTURE DU CSV ---------------------------
 d3.csv("data/data_fr_new.csv")
 .row( (d, i) => {
@@ -25,7 +28,7 @@ d3.csv("data/data_fr_new.csv")
 
 // COnstruction hiérarchie
 const levels = ["geo", "sex"]
-const filtres = ["FR20", "FR30"]
+const filtres = ["FR10", "FR30"]
 var hierarchy;
 
 setTimeout(function(){
@@ -34,21 +37,18 @@ setTimeout(function(){
       }); 
     
     hierarchy = flatToHierarchy(test, levels, 'icd10', 'y2015')
-    console.log(hierarchy);
+    focus = hierarchy;
+    //console.log(d3.pack(hierarchy))
+    g.on("click", function(){
+        console.log('Click');
+        zoom(hierarchy);
+    });
+
     drawViz(hierarchy)
     drawViz2(hierarchy)
     },5000);
 
 // ALL RIGHT DATA IS GLOBAL 
-
-/// ---------------------------------------------------------------------------------------
-
-// Prepare our physical space
-//var g = d3.select('svg').attr('width', vWidth).attr('height', vHeight).select('g');
-// set the dimensions and margins of the graph
-// var width = 500
-// var height = 500
-
 
 // ------------- ADAPTER LA TAILLE A CELLE DE LA DIV ---------------------------------------
 var parentDiv = document.getElementById("bubble")
@@ -62,60 +62,53 @@ var g = d3.select("#bubble")
     .attr("width", containerWidth)
     .attr("height", containerHeight)
     .append("g")
+    .attr("viewBox", `-${vWidth / 2} -${vHeight / 2} ${vWidth} ${vHeight}`)
+    .attr('transform', 'translate(' + vWidth / 2 + ',' + vHeight / 2 + ')')
+
+function drawViz(data) {
+//   // Declare d3 layout
+    var vRoot = data;
+    var vLayout = d3.pack();
+    //.size([vWidth, vHeight]);
+//   // Layout + Data
+
+    var vNodes = vRoot.descendants().slice(1);
+    vLayout(vRoot);
+    vSlices = g.selectAll('circle').data(vNodes).enter().append('circle');
+
+    // Draw on screen
+    vSlices.attr('cx', function (d) { return d.x; })
+        .attr('cy', function (d) { return d.y; })
+        .attr('r', function (d) { return d.r; })
+        .style("fill-opacity", "0.1")
+        .attr("pointer-events", d => !d.children ? "none" : null)
+        .on("mouseover", function() { d3.select(this).attr("stroke", "#000"); })
+        .on("mouseout", function() { d3.select(this).attr("stroke", null); })
+        .on("click", d => focus !== d && (zoom(d), d3.event.stopPropagation()));
+
+    label =
+    g.selectAll('text')
+    .data(vNodes)
+    .enter()
+    .append('svg:text')
+    .attr('x', function (d) {
+        return d.x;
+    })
+    .attr('y', function (d) {
+        return d.y;
+    })
+    // sets the horizontal alignment to the middle
+    .attr('text-anchor', "middle")
+    // sets the vertical alignment to the middle of the line
+    .attr('dy', '0.35em')
+    //.join("text")
+        .style("fill-opacity", d => d.parent === vRoot ? 1 : 0)
+        .style("display", d => d.parent === vRoot ? "inline" : "none")
+        .text(d => d.data.name)
+    zoomTo([vRoot.x, vRoot.y, vRoot.r * 2]);
 
 
-// create dummy data -> just one element per circle
-d3.csv("hierchie.csv", function(data){
-    //drawViz(data);
-    //drawViz2(data)
-  });
-
-  function drawViz(data) {
-    //   var vData = d3.stratify()
-    //       .id(function(d) { return d.id; })
-    //       .parentId(function(d) { return d.parentId; })(data);
-    //   // Declare d3 layout
-      var vRoot = data;
-      var vLayout = d3.pack().size([vWidth, vHeight]);
-    //   // Layout + Data
-    //   var vRoot = d3.hierarchy(vData).sum(function (d) { return d.data["2015"]; });
-      var vNodes = vRoot.descendants();
-      vLayout(vRoot);
-      //console.log(vNodes)
-      var vSlices = g.selectAll('circle').data(vNodes).enter().append('circle');
-
-      // Draw on screen
-      vSlices.attr('cx', function (d) { return d.x; })
-          .attr('cy', function (d) { return d.y; })
-          .attr('r', function (d) { return d.r; })
-          .style("fill-opacity", "0.1")
-          .attr("pointer-events", d => !d.children ? "none" : null)
-          .on("mouseover", function() { d3.select(this).attr("stroke", "#000"); })
-          .on("mouseout", function() { d3.select(this).attr("stroke", null); })
-          .on("click", d => focus !== d && (zoom(d), d3.event.stopPropagation()));
-
-      var label =
-        g.selectAll('text')
-        .data(vNodes)
-        .enter()
-        .append('svg:text')
-        .attr('x', function (d) {
-            return d.x;
-        })
-        .attr('y', function (d) {
-            return d.y;
-        })
-        // sets the horizontal alignment to the middle
-        .attr('text-anchor', "middle")
-        // sets the vertical alignment to the middle of the line
-        .attr('dy', '0.35em')
-        //.join("text")
-          .style("fill-opacity", d => d.parent === vRoot ? 1 : 0)
-          .style("display", d => d.parent === vRoot ? "inline" : "none")
-          .text(d => d.data.name)
-  }
-
-
+}
 
 var nodeData = {
     "name": "TOPICS", "children": [{
@@ -181,7 +174,6 @@ function drawViz2(data) {
         .text(function(d) { return d.parent ? d.data.name : "" });
 }
 
-
 function computeTextRotation(d) {
     var angle = (d.x0 + d.x1) / Math.PI * 90;
 
@@ -189,7 +181,6 @@ function computeTextRotation(d) {
     return (angle < 120 || angle > 270) ? angle : angle + 180;  // labels as rims
     //return (angle < 180) ? angle - 90 : angle + 90;  // labels as spokes
 }
-
 
 function flatToHierarchy(flatData, levels, nameField, countField) {
     // Adapted from https://stackoverflow.com/a/19317823
@@ -225,3 +216,34 @@ function flatToHierarchy(flatData, levels, nameField, countField) {
     })
     return d3.hierarchy(nestedData).sum(function(d){ return d.count; })
 }
+
+function zoomTo(v) {
+    console.log(v)
+    const k = vWidth / v[2];
+    view = v;
+
+    label.attr("transform", d => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k})`);
+    vSlices.attr("transform", d => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k})`);
+    vSlices.attr("r", d => d.r * k);
+    }
+
+function zoom(d) {
+    console.log(d)
+    g.attr("viewBox", `-${vWidth / 2} -${vHeight / 2} ${vWidth} ${vHeight}`)
+
+    const focus0 = focus;
+    focus = d;
+    const transition = svg.transition()
+        .duration(d3.event.altKey ? 7500 : 750)
+        .tween("zoom", d => {
+            const i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r*2]);
+            return t => zoomTo(i(t));
+        });
+
+    label
+        .filter(function(d) { return d.parent === focus || this.style.display === "inline"; })
+        .transition(transition)
+        .style("fill-opacity", d => d.parent === focus ? 1 : 0)
+        .on("start", function(d) { if (d.parent === focus) this.style.display = "inline"; })
+        .on("end", function(d) { if (d.parent !== focus) this.style.display = "none"; });
+    }
