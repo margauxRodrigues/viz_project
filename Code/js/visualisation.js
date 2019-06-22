@@ -14,7 +14,7 @@ d3.csv("data/data_fr.csv")
         age: d.age,
         geo0: d.geo_niv_0,
         geo1: d.geo_niv_1,
-        geo2: d.geo_niv_2,
+        //geo2: d.geo_niv_2,
         icd10_0: d.icd10_niv_0,
         icd10_1: d.icd10_niv_1,
         icd10_2: d.icd10_niv_2,
@@ -36,14 +36,14 @@ d3.csv("data/data_fr.csv")
 
 // COnstruction hiérarchie
 const levels_bubble = ["region", "sex"]
-const filtres_bubble = ["FR10", "FR30", "FR26"]
+const filtres_bubble = ["Basse-Normandie (NUTS 2013)", "Auvergne (NUTS 2013)", "Nord - Pas-de-Calais (NUTS 2013)"]
 const levels_sunburst = ["icd10_1", "icd10_2"]
 var hierarchy_bubble;
 var hierarchy_sunburst;
 
 setTimeout(function(){
     var filt_data_bubble = data.filter(function(row){
-        return (row["sex"] !== "T") && (row["geo2"]!=="FR") && (filtres_bubble.indexOf(row["geo2"]) !== -1);
+        return (row["sex"] !== "T") && (row["region"]!=="FR") && (filtres_bubble.indexOf(row["region"]) !== -1);
       }); 
     
     hierarchy_bubble = flatToHierarchyBubble(filt_data_bubble, levels_bubble, 'maladies', 'y2015')
