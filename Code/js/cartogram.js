@@ -1,4 +1,6 @@
-(function(exports) {
+var parentDiv = document.getElementById("france")
+var containerWidth = parentDiv.clientWidth;
+var containerHeight = parentDiv.clientHeight;
 
   /*
    * d3.cartogram is a d3-friendly implementation of An Algorithm to Construct
@@ -26,6 +28,29 @@
    *      .attr("d", cartogram.path);
    * });
    */
+
+  var svg = d3.select("#france")
+    .append("svg")
+        .attr("width", containerWidth - 10 )
+        .attr("height", containerHeight - 10)
+    .append("g")
+        .attr("height",  containerHeight - 10 )
+
+  var cartogram = d3.cartogram()
+      .projection()
+      .value(function(d) {
+      return Math.random() * 100;
+    });
+
+  d3.json("../json/france.json", function(topology) {
+      var features = cartogram(topology);
+      d3.select("svg").selectAll("path")
+          .data(features)
+          .enter()
+          .append("path")
+          .attr("d", cartogram.path);
+  });
+
   d3.cartogram = function() {
 
     function carto(topology, geometries) {
@@ -336,5 +361,3 @@
   function reverse(array, n) {
     var t, j = array.length, i = j - n; while (i < --j) t = array[i], array[i++] = array[j], array[j] = t;
   }
-
-})(this);
