@@ -5,13 +5,20 @@ var view;
 var label;
 var vSlices;
 // ------------- LECTURE DU CSV ---------------------------
-d3.csv("data/data_fr_new.csv")
+d3.csv("data/data_fr.csv")
 .row( (d, i) => {
     return {
         sex: d.sex,
         age: d.age,
-        geo: d.geo,
-        icd10: d.icd10,
+        geo0: d.geo_niv_0,
+        geo1: d.geo_niv_1,
+        geo2: d.geo_niv_2,
+        icd10_0: d.icd10_niv_0,
+        icd10_1: d.icd10_niv_1,
+        icd10_2: d.icd10_niv_2,
+        icd10_3: d.icd10_niv_3,
+        maladies:d.maladies,
+        region:d.region,
         y2015: +d["2015"]
     };
 })
@@ -27,26 +34,29 @@ d3.csv("data/data_fr_new.csv")
 });
 
 // COnstruction hiérarchie
-const levels = ["geo", "sex"]
-const filtres = ["FR10", "FR30"]
-var hierarchy;
+const levels_bubble = ["geo2", "sex"]
+const filtres_bubble = ["FR10", "FR30", "FR26"]
+const levels_sunburst = ["icd10_0","icd10_1", "icd10_2"]
+var hierarchy_bubble;
+var hierarchy_sunburst;
 
 setTimeout(function(){
-    var test = data.filter(function(row){
-        return (row["sex"] !== "T") && (row["geo"]!=="FR") && (filtres.indexOf(row["geo"]) !== -1);
+    var filt_data_bubble = data.filter(function(row){
+        return (row["sex"] !== "T") && (row["geo2"]!=="FR") && (filtres_bubble.indexOf(row["geo2"]) !== -1);
       }); 
     
-    hierarchy = flatToHierarchy(test, levels, 'icd10', 'y2015')
-    focus = hierarchy;
+    hierarchy_bubble = flatToHierarchy(filt_data_bubble, levels_bubble, 'icd10_3', 'y2015')
+    hierarchy_sunburst = flatToHierarchy(filt_data_bubble, levels_sunburst, 'icd10_3', 'y2015')
+
+    focus = hierarchy_bubble;
     //console.log(d3.pack(hierarchy))
     g.on("click", function(){
-        console.log('Click');
-        zoom(hierarchy);
+        zoom(hierarchy_bubble);
     });
-
-    drawViz(hierarchy)
-    drawViz2(hierarchy)
-    },5000);
+    console.log(hierarchy_sunburst)
+    drawViz(hierarchy_bubble)
+    drawViz2(hierarchy_sunburst)
+    },30000);
 
 // ALL RIGHT DATA IS GLOBAL 
 
