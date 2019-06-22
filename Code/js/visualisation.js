@@ -34,9 +34,9 @@ d3.csv("data/data_fr.csv")
 });
 
 // COnstruction hiérarchie
-const levels_bubble = ["geo2", "sex"]
+const levels_bubble = ["region", "sex"]
 const filtres_bubble = ["FR10", "FR30", "FR26"]
-const levels_sunburst = ["icd10_0","icd10_1", "icd10_2"]
+const levels_sunburst = ["icd10_1", "icd10_2"]
 var hierarchy_bubble;
 var hierarchy_sunburst;
 
@@ -45,8 +45,8 @@ setTimeout(function(){
         return (row["sex"] !== "T") && (row["geo2"]!=="FR") && (filtres_bubble.indexOf(row["geo2"]) !== -1);
       }); 
     
-    hierarchy_bubble = flatToHierarchy(filt_data_bubble, levels_bubble, 'icd10_3', 'y2015')
-    hierarchy_sunburst = flatToHierarchy(filt_data_bubble, levels_sunburst, 'icd10_3', 'y2015')
+    hierarchy_bubble = flatToHierarchy(filt_data_bubble, levels_bubble, 'maladies', 'y2015')
+    hierarchy_sunburst = flatToHierarchy(filt_data_bubble, levels_sunburst, 'maladies', 'y2015')
 
     focus = hierarchy_bubble;
     //console.log(d3.pack(hierarchy))
@@ -181,6 +181,8 @@ function drawViz2(data) {
             return "translate(" + arc.centroid(d) + ")rotate(" + computeTextRotation(d) + ")"; })
         .attr("dx", "-20") // radius margin
         .attr("dy", ".5em") // rotation align
+        .style("display", d => d.parent === root ? "inline" : "none")
+
         .text(function(d) { return d.parent ? d.data.name : "" });
 }
 
