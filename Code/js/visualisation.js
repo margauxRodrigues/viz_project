@@ -57,7 +57,7 @@ setTimeout(function(){
             console.log(hierarchy_sunburst)
     drawViz(hierarchy_bubble)
     drawViz2(hierarchy_sunburst)
-    },30000);
+    },1000);
 
 // ALL RIGHT DATA IS GLOBAL 
 
@@ -85,10 +85,13 @@ function drawViz(data) {
     var vNodes = vRoot.descendants().slice(1);
     vLayout(vRoot);
     vSlices = g.selectAll('circle')
+        .remove()
+        .exit()
         .data(vNodes)
         .enter()
         .append('circle');
-
+    vSlices.merge(g).transition().duration(2000)
+    vSlices.exit().remove()
     // Draw on screen
     vSlices.attr('cx', function (d) { return d.x; })
         .attr('cy', function (d) { return d.y; })
@@ -107,7 +110,8 @@ function drawViz(data) {
         })
         .on("click", d => focus !== d && (zoom(d), d3.event.stopPropagation()))
         .append("svg:title")
-            .text(showtext);
+            .text(showtext)
+        .transition();
 
     label = g.selectAll('text')
         .data(vNodes)
@@ -130,8 +134,6 @@ function drawViz(data) {
         .style("display", "none")
         .text(d => d.data.name)
     zoomTo([vRoot.x, vRoot.y, vRoot.r * 2]);
-    vSlices.transition()
-    vSlices.exit().remove()
     
 }
 
@@ -206,6 +208,8 @@ function drawViz2(data) {
         
         var slice = g1.selectAll('g.node').data(root.descendants(), function(d) { return d.data.name; }); // .enter().append('g').attr("class", "node");
         newSlice = slice.enter().append('g').attr("class", "node").merge(slice);
+        newSlice.on("mouseover", function() { 
+            d3.select(this).attr("stroke", "#000")});
         slice.exit().remove();
 
         slice.selectAll('text').remove();
@@ -324,6 +328,8 @@ function zoom(d) {
         .on("start", function(d) { if (d.parent === focus) this.style.display = "inline"; })
         .on("end", function(d) { if (d.parent !== focus) this.style.display = "none"; });
     }
+
+
 function highlightSelectedSlice(c,i) {
 
         clicked = c;
@@ -336,8 +342,8 @@ function highlightSelectedSlice(c,i) {
         var filt_data_bubble = data.filter(function(row){
             return (row["sex"] !== "T") && (row["region"]!=="FR") && (filtres_bubble.indexOf(row["region"]) !== -1) && (filtres_bubble_maladie.indexOf(row['icd10_2']) !== -1);
             }); 
-
             hierarchy_bubble = flatToHierarchyBubble(filt_data_bubble, levels_bubble, 'maladies', 'y2015')
             drawViz(hierarchy_bubble)
+            //drawViz(hierarchy_bubble)
         }
     };
