@@ -4,6 +4,8 @@ var data;
 var view;
 var label;
 var vSlices;
+var subset;
+
 // ------------- LECTURE DU CSV ---------------------------
 d3.csv("data/data_fr.csv")
 .row( (d, i) => {
@@ -16,7 +18,6 @@ d3.csv("data/data_fr.csv")
         icd10_0: d.icd10_niv_0,
         icd10_1: d.icd10_niv_1,
         icd10_2: d.icd10_niv_2,
-        icd10_3: d.icd10_niv_3,
         maladies:d.maladies,
         region:d.region,
         y2015: +d["2015"]
@@ -84,7 +85,10 @@ function drawViz(data) {
 
     var vNodes = vRoot.descendants().slice(1);
     vLayout(vRoot);
-    vSlices = g.selectAll('circle').data(vNodes).enter().append('circle');
+    vSlices = g.selectAll('circle')
+        .data(vNodes)
+        .enter()
+        .append('circle');
 
     // Draw on screen
     vSlices.attr('cx', function (d) { return d.x; })
@@ -94,7 +98,6 @@ function drawViz(data) {
         //.attr("pointer-events", d => !d.children ? "none" : null)
         .on("mouseover", function() { 
             d3.select(this).attr("stroke", "#000"); 
-            console.log(this);
             //label.style("display", d => d.parent === focus ? "inline" : "none");
 
             //d3.select(this.label).style("display", d => d.parent === vRoot ? "inline" : "none")
@@ -188,17 +191,20 @@ function drawViz2(data) {
         .attr("display", function (d) { return d.depth ? null : "none"; })
         .attr("d", arc)
         .style('stroke', '#fff')
-        .style("fill", function (d) { return color((d.children ? d : d.parent).data.name); });
+        .style("fill", function (d) { return color((d.children ? d : d.parent).data.name); })
 
-    g1.selectAll(".node")
+    var slices = g1.selectAll("node")
         .append("text")
         .attr("transform", function(d) {
             return "translate(" + arc.centroid(d) + ")rotate(" + computeTextRotation(d) + ")"; })
         .attr("dx", "-20") // radius margin
         .attr("dy", ".5em") // rotation align
         .style("display", d => d.parent === root ? "inline" : "none")
-
-        .text(function(d) { return d.parent ? d.data.print : "" });
+        .text(function(d) { return d.parent ? d.data.print : "" })
+        
+        slices.on("click", console.log("Slice"))
+        //.text(function(d) { return d.data.name + "\n" + formatNumber(d.value); });
+            
 }
 
 function computeTextRotation(d) {
