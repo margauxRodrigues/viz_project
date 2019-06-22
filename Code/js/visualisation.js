@@ -208,8 +208,6 @@ function drawViz2(data) {
         
         var slice = g1.selectAll('g.node').data(root.descendants(), function(d) { return d.data.name; }); // .enter().append('g').attr("class", "node");
         newSlice = slice.enter().append('g').attr("class", "node").merge(slice);
-        newSlice.on("mouseover", function() { 
-            d3.select(this).attr("stroke", "#000")});
         slice.exit().remove();
 
         slice.selectAll('text').remove();
@@ -331,10 +329,16 @@ function zoom(d) {
 
 
 function highlightSelectedSlice(c,i) {
-
         clicked = c;
+        console.log(i);
         console.log(clicked);
-        subset = clicked.data.name
+        newSlice.filter(function(d) {
+            if (d == clicked) {
+                console.log(d);
+                return true;}
+            })
+            .style("opacity", 0.4);
+        subset = clicked.data.name  
         console.log("Function called");
         var filtres_bubble_maladie = subset;
 
