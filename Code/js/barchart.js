@@ -66,7 +66,7 @@ function drawBarChart(data){
       .call(d3.axisLeft(y))
     //Bars
     console.log('Barchart Call')
-    console.log(data)
+
 
   /* var sum_par_maladie =
   d3.rollups(
@@ -85,7 +85,7 @@ function drawBarChart(data){
         d => d.icd10_2
       )
       .map(([k, v]) => ({ Maladie: k, Value: v }))
-
+console.log(output)
     svg.selectAll("myRect")
       .data(data)
       .enter()
@@ -96,15 +96,7 @@ function drawBarChart(data){
       .attr("transform", "translate(0," + 35 + ")")
       .attr("x", function(d) { return x(0); } )
       .attr("y", function(d) { return y(d.icd10_2); })
-      .attr("width", function(d) { return output.Value; })
+      .attr("width", output[Value])
       .attr("height", y.bandwidth() )
       .style("fill", "#666")
   }
-
-    // .attr("x", function(d) { return x(d.Country); })
-    // .attr("y", function(d) { return y(d.Value); })
-    // .attr("width", x.bandwidth())
-    // .attr("height", function(d) { return height - y(d.Value); })
-    // .attr("fill", "#69b3a2")
-
-
