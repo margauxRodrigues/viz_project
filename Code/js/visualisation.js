@@ -46,6 +46,10 @@ setTimeout(function(){
         return (row["sex"] !== "T") && (row["region"]!=="FR") && (filtres_bubble.indexOf(row["region"]) !== -1);
       }); 
     
+    /* var filt_data_barchart = data.filter(function(row){
+        return (row)
+    })
+    */
     hierarchy_bubble = flatToHierarchyBubble(filt_data_bubble, levels_bubble, 'maladies', 'y2015')
     hierarchy_sunburst = flatToHierarchy(filt_data_bubble, levels_sunburst, 'maladies', 'y2015', 'maladies')
 
@@ -57,6 +61,7 @@ setTimeout(function(){
             console.log(hierarchy_sunburst)
     drawViz(hierarchy_bubble)
     drawViz2(hierarchy_sunburst)
+    /* drawViz3(filt_data_barchart) */
     },1000);
 
 // ALL RIGHT DATA IS GLOBAL 
@@ -352,16 +357,12 @@ function highlightSelectedSlice(c,i) {
             //drawViz(hierarchy_bubble)
         }
     };
-/* 
-// ---------------------------------------BARCHART-------------------------------------
-var parentDiv = document.getElementById("barchart")
-var containerWidth = parentDiv.clientWidth;
-var containerHeight = parentDiv.clientHeight;
-var vWidth = containerWidth;
-var vHeight = containerHeight;
-console.log(containerHeight)
 
-var svg = d3.select("#barchart")
+// ---------------------------------------BARCHART-------------------------------------
+
+/* 
+// append the svg object to the body of the page
+var g3 = d3.select("#barchart")
   .append("svg")
     .attr("width", containerWidth )
     .attr("height", containerHeight)
@@ -369,42 +370,52 @@ var svg = d3.select("#barchart")
     .attr("height",  containerHeight )
     .attr("transform", "translate(20,5)");
 
+
+
 function drawViz3(data) {
-// Add X axis
-var x = d3.scaleLinear()
-.domain([0, d3.max(d, function(d){ return y2015 + 20 ; })])
-.range([ 0, 280]);
-svg.append("g")
-.call(d3.axisBottom(x))
-.selectAll("text")
-  .attr("transform", "translate(-10,0)rotate(-45)")
-  .style("text-anchor", "end");
+    // Add X axis
+    var x = d3.scaleLinear()
+        .domain([0, d3.max(data, function(d){ return d.y2015  ; }) + 20])
+        .range([ 0, 280]);
+    svg.append("g")
+        .call(d3.axisBottom(x))
+        .selectAll("text")
+        .attr("transform", "translate(-10,0)rotate(-45)")
+        .style("text-anchor", "end");
 
-// Y axis
-console.log(d3.max(d, function(d){ return y2015; }))
-var y = d3.scaleBand()
-.domain(d.map(function(d) { return icd10_2; }))
-.range([ 0, containerHeight ])
-.padding(.5);
-svg.append("g")
-.call(d3.axisLeft(y))
-console.log(y.bandwidth())
-//Bars
-svg.selectAll("myRect")
-.data(data)
-.enter()
-.selectAll("text")
-  .attr("transform", "translate(10,0)")
-  .style("text-anchor", "end")
-.append("rect")
-.attr("transform", "translate(0," + 35 + ")")
-.attr("x", x(0) )
-.attr("y", function(d) { return y(icd10_2); })
-.attr("width", function(d) { return x(y2015); })
-.attr("height", y.bandwidth() )
-.attr("fill", "#666")
+    // Y axis
+    console.log(d3.min(data, function(d){ return d.y2015; }))
+    var y = d3.scaleBand()
+        .domain(data.map(function(d) { return d.icd10_niv_2; }))
+        .range([ 0, 2 * containerHeight - 20])
+        .padding(.5);
+    svg.append("g")
+        .call(d3.axisLeft(y))
+    //Bars
+    console.log(data['2015'])
+    /* var sum_par_maladie =
+    d3.rollups(
+        data,
+        xs => d3.sum(xs, x => x.y2015),
+        d => d.icd10_niv_2
+    )
+    .map(([k, v]) => ({ icd10_niv_2: k, y2015: v }))
 
-
+    console.log(sum_par_maladie)
+    
+    svg.selectAll("myRect")
+    .data(data)
+    .enter()
+    .selectAll("text")
+    .attr("transform", "translate(10,0)")
+    .style("text-anchor", "end")
+    .append("rect")
+    .attr("transform", "translate(0," + 35 + ")")
+    .attr("x", x(0) )
+    .attr("y", function(d) { return y(d.icd10_niv_2); })
+    .attr("width", d3.sum((data,function(d) { return d.icd10_niv_2; }), (data, function(d){return d.y2015})))
+    .attr("height", y.bandwidth() )
+    .attr("fill", "#666")
 
 }
  */
