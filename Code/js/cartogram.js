@@ -1,32 +1,9 @@
-import { select as d3Select, event as d3Event } from 'd3-selection/d3-selection.min';
-import 'd3-selection/d3-selection.min';
-import {geoMercator} from 'd3-geo/d3-geo.min';
-import cartogramModule from 'topogram/cartogram';
-import Kapsule from 'kapsule/kapsule';
-import accessorFn from 'accessor-fn/accessor-fn';
-import 'd3/d3.min'
-
-var parentDiv = document.getElementById("france");
-var containerWidth = parentDiv.clientWidth;
-var containerHeight = parentDiv.clientHeight;
-
-var svg = d3.select("#france")
-    .append("svg")
-        .attr("width", containerWidth - 10 )
-        .attr("height", containerHeight - 10)
-    .append("g")
-        .attr("height",  containerHeight - 10 );
-
-
-d3.json('../json/france.json', (error, world) => {
-    if (error) throw error;
-    const colorScale = d3.scaleOrdinal([...d3.schemeCategory20, ...d3.schemeCategory20b, ...d3.schemeCategory20c]);
-
-    Cartogram()
-        .topoJson(world)
-        .topoObjectName('countries')
-        .iterations(120);
-});
+import { select as d3Select, event as d3Event } from 'd3-selection';
+import 'd3-transition';
+import { geoMercator } from 'd3-geo';
+import cartogramModule from 'topogram';
+import Kapsule from 'kapsule';
+import accessorFn from 'accessor-fn';
 
 
 // cartogram-chart
