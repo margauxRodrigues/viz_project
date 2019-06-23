@@ -147,6 +147,11 @@ function showtext(d){
             +"\nTotal : " + d.value )
 }
 
+function showtextSunburst(d){
+    return ("Sélection : "+ d.data.name
+            +"\nTotal : " + d.value )
+}
+
 var nodeData = {
     "name": "TOPICS", "children": [{
         "name": "Topic A",
@@ -216,7 +221,8 @@ function drawViz2(data) {
         slice.exit().remove();
 
         slice.selectAll('text').remove();
-
+        newSlice.append("svg:title")
+        .text(showtextSunburst)
         newSlice.on("click", highlightSelectedSlice);
 
 }
