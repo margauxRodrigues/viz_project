@@ -81,7 +81,7 @@ function drawBarChart(data){
 
   var yAxis = d3.scaleBand()
         .domain(data.map(function(d) { return d.Maladie; }))
-        .range([ 0, 2 * containerHeight - 20])
+        .range([ 0, 2 * containerHeight - 60])
         .padding(.5);
     
 
@@ -111,10 +111,12 @@ function drawBarChart(data){
       .attr("width",(function(d) { return ((d.Value * containerHeight / max )); }) )
       .attr("height", BandScale.bandwidth() )
       
-      .style("fill", "#666")
-      .append("g")
+      .style("fill", "#666");
+
+      svg.append("g")
         .call(d3.axisLeft(yAxis))
-        .attr("transform", "translate(0,200)")
+       // .attr("height", containerHeight/2 )
+        .attr("transform", "translate(292,-10)")
 
     }
     // .attr("x", function(d) { return x(d.Country); })
