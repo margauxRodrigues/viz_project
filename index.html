@@ -3,8 +3,9 @@
         <meta charset="utf-8">
         <script src = "https://d3js.org/d3.v4.min.js"></script>
         <script type="text/javascript" src="/Code/js/crossfilter-master/crossfilter.min.js"></script>
-        <script type="text/javascript" src="/Code/js/dc/dc.min.js"></script>
+        <script type="text/javascript" src = "/Code/js/dc/dc.min.js"></script>
         <script src="https://d3js.org/d3-array.v2.min.js"></script>
+        <script src="//unpkg.com/cartogram-chart"></script>
         <link rel="stylesheet" type="text/css" href="/css/style.css">
         <title>DEATH NOTE</title>
     </head>
@@ -26,7 +27,21 @@
         </div>
         <script type = "text/javascript" src = "Code/js/barchart.js"></script>
         <script type = "text/javascript" src = "Code/js/visualisation.js"></script>
-        <script type = "text/javascript" src = "Code/js/cartogram.js"></script>
 
+        <script>
+            d3.json('./Code/json/france.json', (error, france) => {
+            if (error) throw error;
+            console.log(france);
+
+            Cartogram()
+                .topoJson(france)
+                .topoObjectName('regions')
+                .iterations(120)
+                .valFormatter(d3.format(".3s"))
+                .projection(d3.geoMercator().scale(2500).translate([220, 2700]))
+                (document.getElementById('france'));
+            });
+
+        </script>
     </body>
 </html>

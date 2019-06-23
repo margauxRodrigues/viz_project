@@ -18,9 +18,9 @@ export default new Kapsule({
     width: { default: window.innerWidth },
     height: { default: window.innerHeight },
     iterations: { default: 20 },
-    projection: { default: geoMercator()
-      .scale(Math.min((window.innerWidth - 3) / (2 * Math.PI), (window.innerHeight - 3) / (1.2 * Math.PI)))
-      .translate([window.innerWidth / 2, window.innerHeight / 1.5])
+        projection: { default: geoMercator()
+          .scale(Math.min((window.innerWidth - 3) / (2 * Math.PI), (window.innerHeight - 3) / (1.2 * Math.PI)))
+          .translate([window.innerWidth / 2, window.innerHeight / 1.5])
     },
     topoJson: {},
     topoObjectName: {},
