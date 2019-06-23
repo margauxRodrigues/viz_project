@@ -43,9 +43,18 @@ d3.csv("data/data_fr.csv", function(data) {
     .padding(.5);
   svg.append("g")
     .call(d3.axisLeft(y))
-  console.log(y.bandwidth())
   //Bars
+  console.log(data['2015'])
+/* var sum_par_maladie =
+d3.rollups(
+    data,
+    xs => d3.sum(xs, x => x.y2015),
+    d => d.icd10_niv_2
+  )
+  .map(([k, v]) => ({ icd10_niv_2: k, y2015: v }))
 
+console.log(sum_par_maladie)
+ */
   svg.selectAll("myRect")
     .data(data)
     .enter()
@@ -56,7 +65,7 @@ d3.csv("data/data_fr.csv", function(data) {
     .attr("transform", "translate(0," + 35 + ")")
     .attr("x", x(0) )
     .attr("y", function(d) { return y(d.icd10_niv_2); })
-    .attr("width", d3.sum((data,function(d) { return d.icd10_niv_2; }), (data, function(d){return d["2015"]})))
+    .attr("width", d3.sum((data,function(d) { return d.icd10_niv_2; }), (data, function(d){return d.y2015})))
     .attr("height", y.bandwidth() )
     .attr("fill", "#666")
 
