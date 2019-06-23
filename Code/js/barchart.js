@@ -53,7 +53,7 @@ function drawBarChart(data){
     svg.append("g")
         .call(d3.axisBottom(x))
         .selectAll("text")
-        .attr("transform", "translate(-10,0)rotate(-45)")
+        .attr("transform", "translate(0,0)rotate(-45)")
         .style("text-anchor", "end");
 
     // Y axis
@@ -93,10 +93,10 @@ console.log(output)
         .attr("transform", "translate(10,0)")
         .style("text-anchor", "end")
       .append("rect")
-      .attr("transform", "translate(0," + 35 + ")")
+      .attr("transform", "translate(10," + 35 + ")")
       .attr("x", function(d) { return x(0); } )
       .attr("y", function(d) { return y(d.icd10_2); })
-      .attr("width", output[Value])
+      .attr("width", output.filter)
       .attr("height", y.bandwidth() )
       .style("fill", "#666")
   }
