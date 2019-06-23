@@ -15,7 +15,7 @@ var svg = d3.select("#barchart")
     .attr("transform", "translate(20,5)");
 
 // Parse the Data
-d3.json("data/data_fr.csv", function(data) {
+d3.csv("data/data_fr.csv", function(data) {
   data.forEach(function(d) {
     d.geo_niv_1 = d.geo_niv_1;
     d.icd10_niv_1 = d.icd10_niv_1;
@@ -36,15 +36,17 @@ d3.json("data/data_fr.csv", function(data) {
       .style("text-anchor", "end");
 
   // Y axis
-  console.log(d3.max(data, function(d){ return d.y2015; }))
+  console.log(d3.min(data, function(d){ return d.y2015; }))
   var y = d3.scaleBand()
     .domain(data.map(function(d) { return d.icd10_niv_2; }))
-    .range([ 0, containerHeight ])
+    .range([ 0, 2 * containerHeight - 20])
     .padding(.5);
   svg.append("g")
     .call(d3.axisLeft(y))
   console.log(y.bandwidth())
   //Bars
+  console.log(function(d){ return x(d.y2015); })
+
   svg.selectAll("myRect")
     .data(data)
     .enter()
