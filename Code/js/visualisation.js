@@ -6,6 +6,8 @@ var label;
 var vSlices;
 var subset;
 
+
+var test;
 // ------------- LECTURE DU CSV ---------------------------
 d3.csv("data/data_fr.csv")
 .row( (d, i) => {
@@ -84,6 +86,8 @@ function drawViz(data) {
     //.size([vWidth, vHeight]);
 //   // Layout + Data
     var vNodes = vRoot.descendants().slice(1);
+    test = vNodes;
+    console.log(vNodes);
     vLayout(vRoot);
     vSlices = g.selectAll('circle')
         .remove()
@@ -140,7 +144,7 @@ function drawViz(data) {
 
 function showtext(d){
     return ("Sélection : "+ d.data.name
-            +"\nTotal : " + d.data.count )
+            +"\nTotal : " + d.value )
 }
 
 var nodeData = {
