@@ -404,10 +404,6 @@ svg.selectAll("myRect")
 .attr("fill", "#666")
 
 
-// .attr("x", function(d) { return x(d.Country); })
-// .attr("y", function(d) { return y(d.Value); })
-// .attr("width", x.bandwidth())
-// .attr("height", function(d) { return height - y(d.Value); })
-// .attr("fill", "#69b3a2")
+
 }
  */

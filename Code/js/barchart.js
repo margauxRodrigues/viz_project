@@ -11,30 +11,24 @@ var svg = d3.select("#barchart")
     .attr("width", containerWidth )
     .attr("height", containerHeight)
   .append("g")
-    .attr("height",  "718" )
+    .attr("height",  containerHeight )
     .attr("transform", "translate(20,5)");
 
 // Parse the Data
-d3.csv("data/data_fr.csv"), function(data) {
+d3.json("data/data_fr.csv", function(data) {
   data.forEach(function(d) {
-    /* d.sex=  d.sex,
-    d.age= d.age,
-    d.geo0= d.geo_niv_0,
-    d.geo1= d.geo_niv_1,
-    d.icd10_0= d.icd10_niv_0,
-    d.icd10_1= d.icd10_niv_1,
-    d.icd10_2= d.icd10_niv_2,
-    d.maladies=d.maladies,
-    d.region=d.region, */
-    d.y2015= +d["2015"]
+    d.geo_niv_1 = d.geo_niv_1;
+    d.icd10_niv_1 = d.icd10_niv_1;
+    d.icd10_niv_2 = d.icd10_niv_2;
+    d.y2015 = +d["2015"];
 });
 
 
  
   // Add X axis
   var x = d3.scaleLinear()
-    .domain([0, containerWidth - 20 ])
-    .range([ 0, 100]);
+    .domain([0, d3.max(data, function(d){ return d.y2015 + 20 ; })])
+    .range([ 0, 280]);
   svg.append("g")
     .call(d3.axisBottom(x))
     .selectAll("text")
@@ -45,7 +39,7 @@ d3.csv("data/data_fr.csv"), function(data) {
   console.log(d3.max(data, function(d){ return d.y2015; }))
   var y = d3.scaleBand()
     .domain(data.map(function(d) { return d.icd10_niv_2; }))
-    .range([ 0, 2*containerHeight - 30 ])
+    .range([ 0, containerHeight ])
     .padding(.5);
   svg.append("g")
     .call(d3.axisLeft(y))
@@ -55,7 +49,7 @@ d3.csv("data/data_fr.csv"), function(data) {
     .data(data)
     .enter()
     .selectAll("text")
-      .attr("transform", "translate(20,0)")
+      .attr("transform", "translate(10,0)")
       .style("text-anchor", "end")
     .append("rect")
     .attr("transform", "translate(0," + 35 + ")")
