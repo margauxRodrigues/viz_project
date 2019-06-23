@@ -181,7 +181,6 @@ var g1 = d3.select("#sunburst")
     .append('g')
     .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
 
-
 function drawViz2(data) {
     // var vData = d3.stratify()
     //     .id(function(d) { return d.id; })
@@ -347,12 +346,10 @@ function highlightSelectedSlice(c,i) {
         if (previouscliked !== c){
             newSlice.filter(function(d) {
                 if (d == clicked) {
-                    console.log(d);
                     return true;}
                 })
                 .style("opacity", 0.4);
             subset = clicked.data.name  
-            console.log("Function called");
             var filtres_bubble_maladie = subset;
             if (clicked.height == 1 ){
             var filt_data_bubble = data.filter(function(row){
