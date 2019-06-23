@@ -27,7 +27,7 @@ d3.csv("data/data_fr.csv", function(data) {
  
   // Add X axis
   var x = d3.scaleLinear()
-    .domain([0, d3.max(data, function(d){ return d.y2015 + 20 ; })])
+    .domain([0, d3.max(data, function(d){ return d.y2015  ; }) + 20])
     .range([ 0, 280]);
   svg.append("g")
     .call(d3.axisBottom(x))
@@ -45,7 +45,6 @@ d3.csv("data/data_fr.csv", function(data) {
     .call(d3.axisLeft(y))
   console.log(y.bandwidth())
   //Bars
-  console.log(function(d){ return x(d.y2015); })
 
   svg.selectAll("myRect")
     .data(data)
@@ -57,7 +56,7 @@ d3.csv("data/data_fr.csv", function(data) {
     .attr("transform", "translate(0," + 35 + ")")
     .attr("x", x(0) )
     .attr("y", function(d) { return y(d.icd10_niv_2); })
-    .attr("width", function(d) { return x(d.y2015); })
+    .attr("width", d3.sum((data,function(d) { return d.icd10_niv_2; }), (data, function(d){return d["2015"]})))
     .attr("height", y.bandwidth() )
     .attr("fill", "#666")
 
