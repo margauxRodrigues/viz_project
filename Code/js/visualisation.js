@@ -352,7 +352,7 @@ function highlightSelectedSlice(c,i) {
             //drawViz(hierarchy_bubble)
         }
     };
-
+/* 
 // ---------------------------------------BARCHART-------------------------------------
 var parentDiv = document.getElementById("barchart")
 var containerWidth = parentDiv.clientWidth;
@@ -369,10 +369,10 @@ var svg = d3.select("#barchart")
     .attr("height",  containerHeight )
     .attr("transform", "translate(20,5)");
 
-
+function drawViz3(data) {
 // Add X axis
 var x = d3.scaleLinear()
-.domain([0, 2000])
+.domain([0, d3.max(d, function(d){ return y2015 + 20 ; })])
 .range([ 0, 280]);
 svg.append("g")
 .call(d3.axisBottom(x))
@@ -381,9 +381,9 @@ svg.append("g")
   .style("text-anchor", "end");
 
 // Y axis
-//console.log(d3.max(data, function(d){ return y2015; }))
+console.log(d3.max(d, function(d){ return y2015; }))
 var y = d3.scaleBand()
-.domain(data.map(function(d) { return icd10_2; }))
+.domain(d.map(function(d) { return icd10_2; }))
 .range([ 0, containerHeight ])
 .padding(.5);
 svg.append("g")
@@ -405,9 +405,6 @@ svg.selectAll("myRect")
 .attr("fill", "#666")
 
 
-// .attr("x", function(d) { return x(d.Country); })
-// .attr("y", function(d) { return y(d.Value); })
-// .attr("width", x.bandwidth())
-// .attr("height", function(d) { return height - y(d.Value); })
-// .attr("fill", "#69b3a2")
 
+}
+ */
