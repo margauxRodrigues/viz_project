@@ -1,3 +1,4 @@
+*.DS_Store
 viz.code-workspace
 arbo_1.json
 arbo_2.json
