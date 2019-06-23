@@ -67,6 +67,7 @@ var containerWidth = parentDiv.clientWidth;
 var containerHeight = parentDiv.clientHeight;
 var vWidth = containerWidth;
 var vHeight = containerHeight;
+
 // append the svg object to the body of the page
 var g = d3.select("#bubble")
     .append("svg")
