@@ -58,71 +58,53 @@ function drawBarChart(data){
   var y = d3.scaleLinear()
           .range([0.80 * containerHeight, 0])
           .domain([0, d3.max(data, function(d) { return d.Value; })]);
-        
+   
+  // definition de  X axis
+  var xAxis = d3.scaleLinear()
+    .domain([0, max])
+    .range([ 280, 0]);
+  
+  // definition de Y axis
+  var yAxis = d3.scaleBand()
+    .domain(data.map(function(d) { return d.Maladie; }))
+    .range([ 0, 2 * containerHeight - 60])
+    .padding(.5);
+
+
+
   var svg = d3.select("#barchart")
           .append("svg")
             .attr("width", containerWidth )
             .attr("height", 2 * containerHeight)
           .append("g")
             .attr("height", 2 * containerHeight )
-            .attr("transform", "translate(-5,40)");
+            .attr("transform", "translate(-2,40)");
                 
   
-  // Add X axis
-  var xAxis = d3.scaleLinear()
-    .domain([0, max])
-    .range([ 0, 280]);
-    
+  // mise en place de l'echelle des abscisses - X
   svg.append("g")
     .call(d3.axisBottom(xAxis))
     .selectAll("text")
-    .attr("transform", "translate(0,-35)rotate(-45)")
+    .attr("transform", "translate(0,-35)rotate(-65)")
     .style("text-anchor", "end");
 
-  var yAxis = d3.scaleBand()
-        .domain(data.map(function(d) { return d.Maladie; }))
-        .range([ 0, 2 * containerHeight - 60])
-        .padding(.5);
-    
 
-    // Y axis
-    // console.log(d3.min(data, function(d){ return d.Value; }))
-
-    // var y = d3.scaleBand()
-    //   .domain(data.map(function(d) { return d.Maladie; }))
-    //   .range([ 0, 2 * containerHeight - 20])
-    //   .padding(.5);
-
-    //   svg.append("g")
-    //   .call(d3.axisLeft(y))
-
-    //Bars
-    console.log('Barchart Call')
+    // Affichage des Bars
     
     svg.selectAll("myRect")
       .data(data)
       .enter()
-      // .selectAll("text")
-      //   .attr("transform", "translate(10,0)")
-      //   .style("text-anchor", "end")
       .append("rect")
       .attr("x",  function(d) { return y(d.Value); })
       .attr("y",function(d) { return BandScale(d.Maladie); } )
       .attr("width",(function(d) { return ((d.Value * containerHeight / max )); }) )
       .attr("height", BandScale.bandwidth() )
-      
       .style("fill", "#666");
 
+  // Mise en plase de l'echelle des ordonnees - Y
       svg.append("g")
         .call(d3.axisLeft(yAxis))
        // .attr("height", containerHeight/2 )
-        .attr("transform", "translate(292,-10)")
+        .attr("transform", "translate(288,-10)")
 
     }
-    // .attr("x", function(d) { return x(d.Country); })
-    // .attr("y", function(d) { return y(d.Value); })
-    // .attr("width", x.bandwidth())
-    // .attr("height", function(d) { return height - y(d.Value); })
-    // .attr("fill", "#69b3a2")
-
-
