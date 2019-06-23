@@ -5,7 +5,8 @@ var view;
 var label;
 var vSlices;
 var subset;
-
+var previouscliked;
+var sliceSelected = false;
 
 var test;
 // ------------- LECTURE DU CSV ---------------------------
@@ -222,7 +223,7 @@ function drawViz2(data) {
 
         slice.selectAll('text').remove();
         newSlice.append("svg:title")
-        .text(showtextSunburst)
+            .text(showtextSunburst)
         newSlice.on("click", highlightSelectedSlice);
 
 }
@@ -341,40 +342,48 @@ function zoom(d) {
 
 function highlightSelectedSlice(c,i) {
         clicked = c;
-        console.log(i);
-        console.log(clicked);
         newSlice.style("opacity", 1);
-        newSlice.filter(function(d) {
-            if (d == clicked) {
-                console.log(d);
-                return true;}
-            })
-            .style("opacity", 0.4);
-        subset = clicked.data.name  
-        console.log("Function called");
-        var filtres_bubble_maladie = subset;
 
-        if (clicked.height == 1 ){
-        var filt_data_bubble = data.filter(function(row){
-            return (row["sex"] !== "T") && (row["region"]!=="FR") && (filtres_bubble.indexOf(row["region"]) !== -1) && (filtres_bubble_maladie.indexOf(row['icd10_2']) !== -1);
-            }); 
-            hierarchy_bubble = flatToHierarchyBubble(filt_data_bubble, levels_bubble, 'maladies', 'y2015');
-            drawViz(hierarchy_bubble);
+        if (previouscliked !== c){
+            newSlice.filter(function(d) {
+                if (d == clicked) {
+                    console.log(d);
+                    return true;}
+                })
+                .style("opacity", 0.4);
+            subset = clicked.data.name  
+            console.log("Function called");
+            var filtres_bubble_maladie = subset;
+            if (clicked.height == 1 ){
+            var filt_data_bubble = data.filter(function(row){
+                return (row["sex"] !== "T") && (row["region"]!=="FR") && (filtres_bubble.indexOf(row["region"]) !== -1) && (filtres_bubble_maladie.indexOf(row['icd10_2']) !== -1);
+                }); 
+                hierarchy_bubble = flatToHierarchyBubble(filt_data_bubble, levels_bubble, 'maladies', 'y2015');
+                drawViz(hierarchy_bubble);
+            }
+            else if (clicked.height == 2 ){
+                var filt_data_bubble = data.filter(function(row){
+                    return (row["sex"] !== "T") && (row["region"]!=="FR") && (filtres_bubble.indexOf(row["region"]) !== -1) && (filtres_bubble_maladie.indexOf(row['icd10_1']) !== -1);
+                    }); 
+                    hierarchy_bubble = flatToHierarchyBubble(filt_data_bubble, levels_bubble, 'maladies', 'y2015')
+                    drawViz(hierarchy_bubble)
+                }
+            else if (clicked.height == 0 ){
+                var filt_data_bubble = data.filter(function(row){
+                    return (row["sex"] !== "T") && (row["region"]!=="FR") && (filtres_bubble.indexOf(row["region"]) !== -1) && (filtres_bubble_maladie.indexOf(row['maladies']) !== -1);
+                    }); 
+                    hierarchy_bubble = flatToHierarchyBubble(filt_data_bubble, levels_bubble, 'maladies', 'y2015')
+                    drawViz(hierarchy_bubble)
+                }
+            previouscliked = c;
+            }
+        else{
+            var filt_data_bubble = data.filter(function(row){
+                return (row["sex"] !== "T") && (row["region"]!=="FR") && (filtres_bubble.indexOf(row["region"]) !== -1);
+                }); 
+                hierarchy_bubble = flatToHierarchyBubble(filt_data_bubble, levels_bubble, 'maladies', 'y2015');
+                drawViz(hierarchy_bubble);
         }
-        else if (clicked.height == 2 ){
-            var filt_data_bubble = data.filter(function(row){
-                return (row["sex"] !== "T") && (row["region"]!=="FR") && (filtres_bubble.indexOf(row["region"]) !== -1) && (filtres_bubble_maladie.indexOf(row['icd10_1']) !== -1);
-                }); 
-                hierarchy_bubble = flatToHierarchyBubble(filt_data_bubble, levels_bubble, 'maladies', 'y2015')
-                drawViz(hierarchy_bubble)
-            }
-        else if (clicked.height == 0 ){
-            var filt_data_bubble = data.filter(function(row){
-                return (row["sex"] !== "T") && (row["region"]!=="FR") && (filtres_bubble.indexOf(row["region"]) !== -1) && (filtres_bubble_maladie.indexOf(row['maladies']) !== -1);
-                }); 
-                hierarchy_bubble = flatToHierarchyBubble(filt_data_bubble, levels_bubble, 'maladies', 'y2015')
-                drawViz(hierarchy_bubble)
-            }
     };
 /* 
 // ---------------------------------------BARCHART-------------------------------------
