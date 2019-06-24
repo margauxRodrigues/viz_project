@@ -239,7 +239,7 @@ function drawBarChart(data){
     var max = d3.max(data, function(d){ return d.Value  ; });  
   
     var BandScale = d3.scaleBand()
-            .range([0,containerHeight_barchart - 80 ])
+            .range([0,containerHeight_barchart-80])
             .padding(0.1)
             .domain(data.map(function(d) { return d.Maladie; }));
   
@@ -270,12 +270,19 @@ function drawBarChart(data){
     .data(data)
     .enter()
     .append("rect")
-    .attr("x",  function(d) { return y(d.Value); })
+    .attr("x",  function(d) { return xAxis(d.Value); })
     .attr("y",function(d) { return BandScale(d.Maladie); } )
     .attr("width",(function(d) { return (xAxis(0) - xAxis(d.Value)); }) )
     .attr("height", BandScale.bandwidth() )
-    .style("fill", "#666");
-  
+    .style("fill", "#666")
+    .on("mouseover", function(d){
+        tooltip
+          .style("left", d3.event.pageX - 50 + "px")
+          .style("top", d3.event.pageY - 70 + "px")
+          .style("display", "inline-block")
+          .html((d.Maladie) + "<br>" + (d.Value));
+    })
+    .on("mouseout", function(d){ tooltip.style("display", "none");});
     // Mise en plase de l'echelle des ordonnees - Y
         g3.append("g")
           .call(d3.axisLeft(yAxis))
