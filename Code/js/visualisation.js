@@ -19,7 +19,6 @@ d3.csv("data/data_fr.csv")
         geo0: d.geo_niv_0,
         geo1: d.geo_niv_1,
         test: d.nom_geo_niv_1,
-        //geo2: d.geo_niv_2,
         icd10_0: d.icd10_nom_niv_1,
         icd10_1: d["icd10_nom_niv_1.1"],
         icd10_2: d.icd10_nom_niv_2,
@@ -34,8 +33,6 @@ d3.csv("data/data_fr.csv")
         console.log("First row : ", rows[0])
         console.log("Last row : ", rows[rows.length-1])
         data = rows;
-        // console.log(data)
-        //draw();
     }
 });
 
@@ -443,7 +440,3 @@ function showtextSunburst(d){
     return ("Sélection : "+ d.data.name
             +"\nTotal : " + d.value )
 }
-
-
-
-
