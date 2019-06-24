@@ -5,7 +5,10 @@ var view;
 var label;
 var vSlices;
 var subset;
+var previouscliked;
+var sliceSelected = false;
 
+var test;
 // ------------- LECTURE DU CSV ---------------------------
 d3.csv("data/data_fr.csv")
 .row( (d, i) => {
@@ -46,6 +49,10 @@ setTimeout(function(){
         return (row["sex"] !== "T") && (row["region"]!=="FR") && (filtres_bubble.indexOf(row["region"]) !== -1);
       }); 
     
+    /* var filt_data_barchart = data.filter(function(row){
+        return (row)
+    })
+    */
     hierarchy_bubble = flatToHierarchyBubble(filt_data_bubble, levels_bubble, 'maladies', 'y2015')
     hierarchy_sunburst = flatToHierarchy(filt_data_bubble, levels_sunburst, 'maladies', 'y2015', 'maladies')
 
@@ -57,6 +64,7 @@ setTimeout(function(){
             console.log(hierarchy_sunburst)
     drawViz(hierarchy_bubble)
     drawViz2(hierarchy_sunburst)
+    /* drawViz3(filt_data_barchart) */
     },1000);
 
 // ALL RIGHT DATA IS GLOBAL 
@@ -67,6 +75,7 @@ var containerWidth = parentDiv.clientWidth;
 var containerHeight = parentDiv.clientHeight;
 var vWidth = containerWidth;
 var vHeight = containerHeight;
+
 // append the svg object to the body of the page
 var g = d3.select("#bubble")
     .append("svg")
@@ -83,6 +92,8 @@ function drawViz(data) {
     //.size([vWidth, vHeight]);
 //   // Layout + Data
     var vNodes = vRoot.descendants().slice(1);
+    test = vNodes;
+    console.log(vNodes);
     vLayout(vRoot);
     vSlices = g.selectAll('circle')
         .remove()
@@ -139,7 +150,12 @@ function drawViz(data) {
 
 function showtext(d){
     return ("Sélection : "+ d.data.name
-            +"\nTotal : " + d.data.count )
+            +"\nTotal : " + d.value )
+}
+
+function showtextSunburst(d){
+    return ("Sélection : "+ d.data.name
+            +"\nTotal : " + d.value )
 }
 
 var nodeData = {
@@ -169,7 +185,6 @@ var g1 = d3.select("#sunburst")
     .attr("height", height)
     .append('g')
     .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
-
 
 function drawViz2(data) {
     // var vData = d3.stratify()
@@ -211,7 +226,8 @@ function drawViz2(data) {
         slice.exit().remove();
 
         slice.selectAll('text').remove();
-
+        newSlice.append("svg:title")
+            .text(showtextSunburst)
         newSlice.on("click", highlightSelectedSlice);
 
 }
@@ -330,37 +346,53 @@ function zoom(d) {
 
 function highlightSelectedSlice(c,i) {
         clicked = c;
-        console.log(i);
-        console.log(clicked);
-        newSlice.filter(function(d) {
-            if (d == clicked) {
-                console.log(d);
-                return true;}
-            })
-            .style("opacity", 0.4);
-        subset = clicked.data.name  
-        console.log("Function called");
-        var filtres_bubble_maladie = subset;
+        newSlice.style("opacity", 1);
 
-        if (clicked.height == 1 ){
-        var filt_data_bubble = data.filter(function(row){
-            return (row["sex"] !== "T") && (row["region"]!=="FR") && (filtres_bubble.indexOf(row["region"]) !== -1) && (filtres_bubble_maladie.indexOf(row['icd10_2']) !== -1);
-            }); 
-            hierarchy_bubble = flatToHierarchyBubble(filt_data_bubble, levels_bubble, 'maladies', 'y2015')
-            drawViz(hierarchy_bubble)
-            //drawViz(hierarchy_bubble)
+        if (previouscliked !== c){
+            newSlice.filter(function(d) {
+                if (d == clicked) {
+                    return true;}
+                })
+                .style("opacity", 0.4);
+            subset = clicked.data.name  
+            var filtres_bubble_maladie = subset;
+            if (clicked.height == 1 ){
+            var filt_data_bubble = data.filter(function(row){
+                return (row["sex"] !== "T") && (row["region"]!=="FR") && (filtres_bubble.indexOf(row["region"]) !== -1) && (filtres_bubble_maladie.indexOf(row['icd10_2']) !== -1);
+                }); 
+                hierarchy_bubble = flatToHierarchyBubble(filt_data_bubble, levels_bubble, 'maladies', 'y2015');
+                drawViz(hierarchy_bubble);
+            }
+            else if (clicked.height == 2 ){
+                var filt_data_bubble = data.filter(function(row){
+                    return (row["sex"] !== "T") && (row["region"]!=="FR") && (filtres_bubble.indexOf(row["region"]) !== -1) && (filtres_bubble_maladie.indexOf(row['icd10_1']) !== -1);
+                    }); 
+                    hierarchy_bubble = flatToHierarchyBubble(filt_data_bubble, levels_bubble, 'maladies', 'y2015')
+                    drawViz(hierarchy_bubble)
+                }
+            else if (clicked.height == 0 ){
+                var filt_data_bubble = data.filter(function(row){
+                    return (row["sex"] !== "T") && (row["region"]!=="FR") && (filtres_bubble.indexOf(row["region"]) !== -1) && (filtres_bubble_maladie.indexOf(row['maladies']) !== -1);
+                    }); 
+                    hierarchy_bubble = flatToHierarchyBubble(filt_data_bubble, levels_bubble, 'maladies', 'y2015')
+                    drawViz(hierarchy_bubble)
+                }
+            previouscliked = c;
+            }
+        else{
+            var filt_data_bubble = data.filter(function(row){
+                return (row["sex"] !== "T") && (row["region"]!=="FR") && (filtres_bubble.indexOf(row["region"]) !== -1);
+                }); 
+                hierarchy_bubble = flatToHierarchyBubble(filt_data_bubble, levels_bubble, 'maladies', 'y2015');
+                drawViz(hierarchy_bubble);
         }
     };
 
 // ---------------------------------------BARCHART-------------------------------------
-var parentDiv = document.getElementById("barchart")
-var containerWidth = parentDiv.clientWidth;
-var containerHeight = parentDiv.clientHeight;
-var vWidth = containerWidth;
-var vHeight = containerHeight;
-console.log(containerHeight)
 
-var svg = d3.select("#barchart")
+/* 
+// append the svg object to the body of the page
+var g3 = d3.select("#barchart")
   .append("svg")
     .attr("width", containerWidth )
     .attr("height", containerHeight)
@@ -369,44 +401,51 @@ var svg = d3.select("#barchart")
     .attr("transform", "translate(20,5)");
 
 
-// Add X axis
-var x = d3.scaleLinear()
-.domain([0, 2000])
-.range([ 0, 280]);
-svg.append("g")
-.call(d3.axisBottom(x))
-.selectAll("text")
-  .attr("transform", "translate(-10,0)rotate(-45)")
-  .style("text-anchor", "end");
 
-// Y axis
-//console.log(d3.max(data, function(d){ return y2015; }))
-var y = d3.scaleBand()
-.domain(data.map(function(d) { return icd10_2; }))
-.range([ 0, containerHeight ])
-.padding(.5);
-svg.append("g")
-.call(d3.axisLeft(y))
-console.log(y.bandwidth())
-//Bars
-svg.selectAll("myRect")
-.data(data)
-.enter()
-.selectAll("text")
-  .attr("transform", "translate(10,0)")
-  .style("text-anchor", "end")
-.append("rect")
-.attr("transform", "translate(0," + 35 + ")")
-.attr("x", x(0) )
-.attr("y", function(d) { return y(icd10_2); })
-.attr("width", function(d) { return x(y2015); })
-.attr("height", y.bandwidth() )
-.attr("fill", "#666")
+function drawViz3(data) {
+    // Add X axis
+    var x = d3.scaleLinear()
+        .domain([0, d3.max(data, function(d){ return d.y2015  ; }) + 20])
+        .range([ 0, 280]);
+    svg.append("g")
+        .call(d3.axisBottom(x))
+        .selectAll("text")
+        .attr("transform", "translate(-10,0)rotate(-45)")
+        .style("text-anchor", "end");
 
+    // Y axis
+    console.log(d3.min(data, function(d){ return d.y2015; }))
+    var y = d3.scaleBand()
+        .domain(data.map(function(d) { return d.icd10_niv_2; }))
+        .range([ 0, 2 * containerHeight - 20])
+        .padding(.5);
+    svg.append("g")
+        .call(d3.axisLeft(y))
+    //Bars
+    console.log(data['2015'])
+    /* var sum_par_maladie =
+    d3.rollups(
+        data,
+        xs => d3.sum(xs, x => x.y2015),
+        d => d.icd10_niv_2
+    )
+    .map(([k, v]) => ({ icd10_niv_2: k, y2015: v }))
 
-// .attr("x", function(d) { return x(d.Country); })
-// .attr("y", function(d) { return y(d.Value); })
-// .attr("width", x.bandwidth())
-// .attr("height", function(d) { return height - y(d.Value); })
-// .attr("fill", "#69b3a2")
+    console.log(sum_par_maladie)
+    
+    svg.selectAll("myRect")
+    .data(data)
+    .enter()
+    .selectAll("text")
+    .attr("transform", "translate(10,0)")
+    .style("text-anchor", "end")
+    .append("rect")
+    .attr("transform", "translate(0," + 35 + ")")
+    .attr("x", x(0) )
+    .attr("y", function(d) { return y(d.icd10_niv_2); })
+    .attr("width", d3.sum((data,function(d) { return d.icd10_niv_2; }), (data, function(d){return d.y2015})))
+    .attr("height", y.bandwidth() )
+    .attr("fill", "#666")
 
+}
+ */
