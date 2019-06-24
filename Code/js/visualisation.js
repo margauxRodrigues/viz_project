@@ -58,7 +58,7 @@ var containerHeight_barchart = parentDiv_barchart.clientHeight;
 // Construction hiérarchie
 const levels_bubble = ["region", "sex"]
 const filtre_region_default = ["ile de France", "Champagne-Ardenne ", "Picardie ", "Haute-Normandie ", "Centre  ", "Basse-Normandie ", "Bourgogne ", "Lorraine ", "Alsace ", "Franche-Comte ", "Pays de la Loire ", "Bretagne ", "Poitou-Charentes ", "Aquitaine ", "Midi-Pyrenees ", "Limousin ", "Rhone-Alpes ",  "Auvergne ", "Nord - Pas-de-Calais ", "Languedoc-Roussillon ", "Provence-Alpes-Cote d'Azur ", "Corse "]
-const levels_sunburst = ["icd10_1", "icd10_2"]
+const levels_sunburst = ["icd10_1", "icd10_2", "maladies"]
 var hierarchy_bubble;
 var hierarchy_sunburst;
 var filtre_regions;
@@ -68,7 +68,7 @@ setTimeout(function(){
         return (row["region"]!=="FR") &&  (filtre_region_default.indexOf(row["region"]) !== -1);})
     
     hierarchy_bubble = flatToHierarchyBubble(filt_data_bubble, levels_bubble, 'maladies', 'y2015')
-    hierarchy_sunburst = flatToHierarchy(filt_data_bubble, levels_sunburst, 'maladies', 'y2015', 'maladies')
+    hierarchy_sunburst = flatToHierarchyBubble(filt_data_bubble, levels_sunburst, 'maladies', 'y2015')
     focus = hierarchy_bubble;
     //console.log(d3.pack(hierarchy))
     g.on("click", function(){
@@ -390,7 +390,7 @@ function zoom(d) {
 function highlightSelectedSlice(c,i) {
         clicked = c;
         newSlice.style("opacity", 1);
-
+        console.log(clicked.height)
         if (previouscliked !== c){  
             newSlice.filter(function(d) {
                 if (d == clicked) {
@@ -400,22 +400,22 @@ function highlightSelectedSlice(c,i) {
             subset = clicked.data.name  
             var filtres_bubble_maladie = subset;
             if (clicked.height == 1 ){
-            var filt_data_bubble = data.filter(function(row){
-                return (row["sex"] !== "T") && (row["region"]!=="FR") && (filtre_region_default.indexOf(row["region"]) !== -1) && (filtres_bubble_maladie.indexOf(row['icd10_2']) !== -1);
+                var filt_data_bubble = data.filter(function(row){
+                return (row["sex"] !== "T") && (row["region"]!=="FR") && (filtre_region_default.indexOf(row["region"]) !== -1) && (filtres_bubble_maladie.indexOf(row['maladies']) !== -1);
                 }); 
                 hierarchy_bubble = flatToHierarchyBubble(filt_data_bubble, levels_bubble, 'maladies', 'y2015');
                 drawViz(hierarchy_bubble);
             }
             else if (clicked.height == 2 ){
                 var filt_data_bubble = data.filter(function(row){
-                    return (row["sex"] !== "T") && (row["region"]!=="FR") && (filtre_region_default.indexOf(row["region"]) !== -1) && (filtres_bubble_maladie.indexOf(row['icd10_1']) !== -1);
+                    return (row["sex"] !== "T") && (row["region"]!=="FR") && (filtre_region_default.indexOf(row["region"]) !== -1) && (filtres_bubble_maladie.indexOf(row['icd10_2']) !== -1);
                     }); 
                     hierarchy_bubble = flatToHierarchyBubble(filt_data_bubble, levels_bubble, 'maladies', 'y2015')
                     drawViz(hierarchy_bubble)
                 }
-            else if (clicked.height == 0 ){
-                var filt_data_bubble = data.filter(function(row){
-                    return (row["sex"] !== "T") && (row["region"]!=="FR") && (filtre_region_default.indexOf(row["region"]) !== -1) && (filtres_bubble_maladie.indexOf(row['maladies']) !== -1);
+            else if (clicked.height == 3 ){
+                    var filt_data_bubble = data.filter(function(row){
+                    return (row["sex"] !== "T") && (row["region"]!=="FR") && (filtre_region_default.indexOf(row["region"]) !== -1) && (filtres_bubble_maladie.indexOf(row['icd10_1']) !== -1);
                     }); 
                     hierarchy_bubble = flatToHierarchyBubble(filt_data_bubble, levels_bubble, 'maladies', 'y2015')
                     drawViz(hierarchy_bubble)
