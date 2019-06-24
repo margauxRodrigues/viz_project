@@ -18,10 +18,11 @@ d3.csv("data/data_fr.csv")
         age: d.age,
         geo0: d.geo_niv_0,
         geo1: d.geo_niv_1,
+        test: d.nom_geo_niv_1,
         //geo2: d.geo_niv_2,
-        icd10_0: d.icd10_niv_0,
-        icd10_1: d.icd10_niv_1,
-        icd10_2: d.icd10_niv_2,
+        icd10_0: d.icd10_nom_niv_1,
+        icd10_1: d["icd10_nom_niv_1.1"],
+        icd10_2: d.icd10_nom_niv_2,
         maladies:d.maladies,
         region:d.region,
         y2015: +d["2015"]
@@ -59,14 +60,14 @@ var containerHeight_barchart = parentDiv_barchart.clientHeight;
 
 // Construction hiérarchie
 const levels_bubble = ["region", "sex"]
-const filtres_bubble = ["Basse-Normandie (NUTS 2013)", "Auvergne (NUTS 2013)", "Nord - Pas-de-Calais (NUTS 2013)"]
+const filtres_bubble = ["Basse-Normandie ", "Auvergne ", "Nord - Pas-de-Calais "]
 const levels_sunburst = ["icd10_1", "icd10_2"]
 var hierarchy_bubble;
 var hierarchy_sunburst;
 
 setTimeout(function(){
     var filt_data_bubble = data.filter(function(row){
-        return (row["sex"] !== "T") && (row["region"]!=="FR") && (filtres_bubble.indexOf(row["region"]) !== -1);
+        return (row["region"]!=="FR") && (filtres_bubble.indexOf(row["region"]) !== -1);
       }); 
     
     /* var filt_data_barchart = data.filter(function(row){
@@ -75,14 +76,14 @@ setTimeout(function(){
     */
     hierarchy_bubble = flatToHierarchyBubble(filt_data_bubble, levels_bubble, 'maladies', 'y2015')
     hierarchy_sunburst = flatToHierarchy(filt_data_bubble, levels_sunburst, 'maladies', 'y2015', 'maladies')
-
+    console.log(hierarchy_bubble)
     focus = hierarchy_bubble;
     //console.log(d3.pack(hierarchy))
     g.on("click", function(){
         zoom(hierarchy_bubble);
     });
-            console.log(hierarchy_sunburst)
-    output = d3.rollups(
+        console.log(hierarchy_sunburst)
+        output = d3.rollups(
         data,
         xs => d3.sum(xs, x => x.y2015),
         d =>  d.icd10_2
