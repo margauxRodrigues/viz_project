@@ -9,6 +9,7 @@ var previouscliked;
 var sliceSelected = false;
 var output;
 var test;
+
 // ------------- LECTURE DU CSV ---------------------------
 d3.csv("data/data_fr.csv")
 .row( (d, i) => {
@@ -37,7 +38,26 @@ d3.csv("data/data_fr.csv")
     }
 });
 
-// COnstruction hiérarchie
+// ------------- ADAPTER LA TAILLE A CELLE DE LA DIV ---------------------------------------
+var parentDiv_bubble = document.getElementById("bubble")
+var containerWidth_bubble = parentDiv_bubble.clientWidth;
+var containerHeight_bubble = parentDiv_bubble.clientHeight;
+var vWidth_bubble = containerWidth_bubble;
+var vHeight_bubble = containerHeight_bubble;
+
+// Adapt sunburst object
+var parentDiv_sunburst = document.getElementById("sunburst")
+var width_sunburst = parentDiv_sunburst.clientWidth;
+var height_sunburst = parentDiv_sunburst.clientHeight;
+var radius = Math.min(width_sunburst, height_sunburst) / 2;
+var color = d3.scaleOrdinal(d3.schemeCategory20b);
+
+// adapt barchart
+var parentDiv_barchart = document.getElementById("barchart")
+var containerWidth_barchart = parentDiv_barchart.clientWidth;
+var containerHeight_barchart = parentDiv_barchart.clientHeight;
+
+// Construction hiérarchie
 const levels_bubble = ["region", "sex"]
 const filtres_bubble = ["Basse-Normandie (NUTS 2013)", "Auvergne (NUTS 2013)", "Nord - Pas-de-Calais (NUTS 2013)"]
 const levels_sunburst = ["icd10_1", "icd10_2"]
@@ -79,21 +99,31 @@ setTimeout(function(){
 
 // ALL RIGHT DATA IS GLOBAL 
 
-// ------------- ADAPTER LA TAILLE A CELLE DE LA DIV ---------------------------------------
-var parentDiv = document.getElementById("bubble")
-var containerWidth = parentDiv.clientWidth;
-var containerHeight = parentDiv.clientHeight;
-var vWidth = containerWidth;
-var vHeight = containerHeight;
 
-// append the svg object to the body of the page
+// Append bubble object
 var g = d3.select("#bubble")
     .append("svg")
-    .attr("width", containerWidth)
-    .attr("height", containerHeight)
+    .attr("width", containerWidth_bubble)
+    .attr("height", containerHeight_bubble)
     .append("g")
-    .attr("viewBox", `-${vWidth / 2} -${vHeight / 2} ${vWidth} ${vHeight}`)
-    .attr('transform', 'translate(' + vWidth / 2 + ',' + vHeight / 2 + ')')
+    .attr("viewBox", `-${vWidth_bubble / 2} -${vHeight_bubble / 2} ${vWidth_bubble} ${vHeight_bubble}`)
+    .attr('transform', 'translate(' + vWidth_bubble / 2 + ',' + vHeight_bubble / 2 + ')')
+
+// Append sunburst object
+var g1 = d3.select("#sunburst")
+    .append("svg")
+    .attr("width", width_sunburst)
+    .attr("height", height_sunburst)
+    .append('g')
+    .attr('transform', 'translate(' + width_sunburst / 2 + ',' + height_sunburst / 2 + ')');
+
+var g3 = d3.select("#barchart")
+    .append("svg")
+    .attr("width", containerWidth_barchart )
+    .attr("height", 2 * containerHeight_barchart)
+    .append("g")
+    .attr("height", 2 * containerHeight_barchart )
+    .attr("transform", "translate(-2,40)");
 
 function drawViz(data) {
 //   // Declare d3 layout
@@ -158,44 +188,6 @@ function drawViz(data) {
     
 }
 
-function showtext(d){
-    return ("Sélection : "+ d.data.name
-            +"\nTotal : " + d.value )
-}
-
-function showtextSunburst(d){
-    return ("Sélection : "+ d.data.name
-            +"\nTotal : " + d.value )
-}
-
-var nodeData = {
-    "name": "TOPICS", "children": [{
-        "name": "Topic A",
-        "children": [{"name": "Sub A1", "size": 4}, {"name": "Sub A2", "size": 4}]
-    }, {
-        "name": "Topic B",
-        "children": [{"name": "Sub B1", "size": 3}, {"name": "Sub B2", "size": 3}, {
-            "name": "Sub B3", "size": 3}]
-    }, {
-        "name": "Topic C",
-        "children": [{"name": "Sub A1", "size": 4}, {"name": "Sub A2", "size": 4}]
-    }]
-};
-
-var parentDiv = document.getElementById("sunburst")
-var width = parentDiv.clientWidth;
-var height = parentDiv.clientHeight;
-var radius = Math.min(width, height) / 2;
-var color = d3.scaleOrdinal(d3.schemeCategory20b);
-
-
-var g1 = d3.select("#sunburst")
-    .append("svg")
-    .attr("width", width)
-    .attr("height", height)
-    .append('g')
-    .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
-
 function drawViz2(data) {
     // var vData = d3.stratify()
     //     .id(function(d) { return d.id; })
@@ -242,29 +234,17 @@ function drawViz2(data) {
 
 }
 
-var parentDiv = document.getElementById("barchart")
-var containerWidth = parentDiv.clientWidth;
-var containerHeight = parentDiv.clientHeight;
-
-var g3 = d3.select("#barchart")
-            .append("svg")
-              .attr("width", containerWidth )
-              .attr("height", 2 * containerHeight)
-            .append("g")
-              .attr("height", 2 * containerHeight )
-              .attr("transform", "translate(-2,40)");
-                  
 function drawBarChart(data){
     console.log("coucou")
     var max = d3.max(data, function(d){ return d.Value  ; });  
   
     var BandScale = d3.scaleBand()
-            .range([0, 2 * containerHeight - 80 ])
+            .range([0, 2 * containerHeight_barchart - 80 ])
             .padding(0.1)
             .domain(data.map(function(d) { return d.Maladie; }));
   
     var y = d3.scaleLinear()
-            .range([0.80 * containerHeight, 0])
+            .range([0.80 * containerHeight_barchart, 0])
             .domain([0, d3.max(data, function(d) { return d.Value; })]);
      
     // definition de  X axis
@@ -275,12 +255,8 @@ function drawBarChart(data){
     // definition de Y axis
     var yAxis = d3.scaleBand()
       .domain(data.map(function(d) { return d.Maladie; }))
-      .range([ 0, 2 * containerHeight - 60])
+      .range([ 0, 2 * containerHeight_barchart - 60])
       .padding(.5);
-  
-  
-  
-    
     
     // mise en place de l'echelle des abscisses - X
     g3.append("g")
@@ -289,16 +265,14 @@ function drawBarChart(data){
       .attr("transform", "translate(0,-35)rotate(-65)")
       .style("text-anchor", "end");
   
-  
       // Affichage des Bars
-      
       g3.selectAll("myRect")
         .data(data)
         .enter()
         .append("rect")
         .attr("x",  function(d) { return y(d.Value); })
         .attr("y",function(d) { return BandScale(d.Maladie); } )
-        .attr("width",(function(d) { return ((d.Value * containerHeight / max )); }) )
+        .attr("width",(function(d) { return ((d.Value * containerHeight_barchart / max )); }) )
         .attr("height", BandScale.bandwidth() )
         .style("fill", "#666");
   
@@ -391,7 +365,7 @@ function flatToHierarchyBubble(flatData, levels, nameField, countField) {
 
 function zoomTo(v) {
     console.log(v)
-    const k = vWidth / v[2];
+    const k = vWidth_bubble / v[2];
     view = v;
 
     label.attr("transform", d => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k})`);
@@ -401,7 +375,7 @@ function zoomTo(v) {
 
 function zoom(d) {
     console.log(d)
-    g.attr("viewBox", `-${vWidth / 2} -${vHeight / 2} ${vWidth} ${vHeight}`)
+    g.attr("viewBox", `-${vWidth_bubble / 2} -${vHeight_bubble / 2} ${vWidth_bubble} ${vHeight_bubble}`)
 
     const focus0 = focus;
     focus = d;
@@ -466,7 +440,17 @@ function highlightSelectedSlice(c,i) {
         }
     };
 
-// ---------------------------------------BARCHART-------------------------------------
+
+function showtext(d){
+    return ("Sélection : "+ d.data.name
+            +"\nTotal : " + d.value )
+}
+
+function showtextSunburst(d){
+    return ("Sélection : "+ d.data.name
+            +"\nTotal : " + d.value )
+}
+
 
 
 
