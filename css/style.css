@@ -6,7 +6,6 @@ body {
   #main {
     display: flex;
     justify-content: space-around;
-    border-style: solid;
   }
   .toolTip {
     position: absolute;
@@ -18,7 +17,7 @@ body {
     padding: 14px;
     text-align: center;
   }
-  
+
   #left {
     flex-direction: column;
     justify-content: space-around;
