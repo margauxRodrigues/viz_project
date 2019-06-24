@@ -327,7 +327,7 @@ function zoom(d) {
 
     const focus0 = focus;
     focus = d;
-    const transition = svg.transition()
+    const transition = g.transition()
         .duration(d3.event.altKey ? 7500 : 750)
         .tween("zoom", d => {
             const i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r*2]);
