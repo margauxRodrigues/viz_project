@@ -19,8 +19,8 @@ d3.csv("data/data_fr.csv")
         geo0: d.geo_niv_0,
         geo1: d.geo_niv_1,
         test: d.nom_geo_niv_1,
-        icd10_0: d.icd10_nom_niv_1,
-        icd10_1: d["icd10_nom_niv_1.1"],
+        icd10_0: d.icd10_nom_niv_0,
+        icd10_1: d["icd10_nom_niv_1"],
         icd10_2: d.icd10_nom_niv_2,
         maladies:d.maladies,
         region:d.region,
@@ -58,18 +58,23 @@ var containerHeight_barchart = parentDiv_barchart.clientHeight;
 // Construction hiérarchie
 const levels_bubble = ["region", "sex"]
 const filtre_region_default = ["ile de France", "Champagne-Ardenne ", "Picardie ", "Haute-Normandie ", "Centre  ", "Basse-Normandie ", "Bourgogne ", "Lorraine ", "Alsace ", "Franche-Comte ", "Pays de la Loire ", "Bretagne ", "Poitou-Charentes ", "Aquitaine ", "Midi-Pyrenees ", "Limousin ", "Rhone-Alpes ",  "Auvergne ", "Nord - Pas-de-Calais ", "Languedoc-Roussillon ", "Provence-Alpes-Cote d'Azur ", "Corse "]
-const levels_sunburst = ["icd10_1", "icd10_2", "maladies"]
+const levels_sunburst = [ "icd10_1", "icd10_2", "maladies"]
 var hierarchy_bubble;
 var hierarchy_sunburst;
 var filtre_regions;
 
 setTimeout(function(){
     var filt_data_bubble = data.filter(function(row){
-        return (row["region"]!=="FR") &&  (filtre_region_default.indexOf(row["region"]) !== -1);})
-    
+        return (row["sex"] !== "T") && (row["maladies"] !== row["icd10_2"]) && (row["maladies"]!=="Toutes causes de mortalite") && (row["region"]!=="France") &&  (filtre_region_default.indexOf(row["region"]) !== -1);})
+
+    var filt_data_sunburst = data.filter(function(row){
+        return ((row["region"] == "France") && (row["maladies"]!=="Toutes causes de mortalite") && (row["sex"] == "T"));})
+
+    console.log(filt_data_sunburst)
     hierarchy_bubble = flatToHierarchyBubble(filt_data_bubble, levels_bubble, 'maladies', 'y2015')
-    hierarchy_sunburst = flatToHierarchyBubble(filt_data_bubble, levels_sunburst, 'maladies', 'y2015')
+    hierarchy_sunburst = flatToHierarchyBubble(filt_data_sunburst, levels_sunburst, 'maladies', 'y2015')
     focus = hierarchy_bubble;
+    console.log(hierarchy_sunburst)
     //console.log(d3.pack(hierarchy))
     g.on("click", function(){
         zoom(hierarchy_bubble);
