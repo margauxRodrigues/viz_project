@@ -60,7 +60,7 @@ var containerHeight_barchart = parentDiv_barchart.clientHeight;
 
 // Construction hiérarchie
 const levels_bubble = ["region", "sex"]
-const filtres_bubble = ["Basse-Normandie ", "Auvergne ", "Nord - Pas-de-Calais "]
+const filtres_bubble = ["ile de France", "Champagne-Ardenne ", "Picardie ", "Haute-Normandie ", "Centre  ", "Basse-Normandie ", "Bourgogne ", "Lorraine ", "Alsace ", "Franche-Comte ", "Pays de la Loire ", "Bretagne ", "Poitou-Charentes ", "Aquitaine ", "Midi-Pyrenees ", "Limousin ", "Rhone-Alpes ",  "Auvergne ", "Nord - Pas-de-Calais ", "Languedoc-Roussillon ", "Provence-Alpes-Cote d'Azur ", "Corse "]
 const levels_sunburst = ["icd10_1", "icd10_2"]
 var hierarchy_bubble;
 var hierarchy_sunburst;
