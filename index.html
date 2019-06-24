@@ -26,21 +26,6 @@
             <div id="barchart" name="barchart" style="width:20%"></div>
         </div>
         <script type = "text/javascript" src = "Code/js/visualisation.js"></script>
-
-        <script>
-            d3.json('./Code/json/france.json', (error, france) => {
-            if (error) throw error;
-            console.log(france);
-
-            Cartogram()
-                .topoJson(france)
-                .topoObjectName('regions')
-                .iterations(120)
-                .valFormatter(d3.format(".3s"))
-                .projection(d3.geoMercator().scale(2500).translate([220, 2700]))
-                (document.getElementById('france'));
-            });
-
-        </script>
+        <script type = "text/javascript" src = "Code/js/cartogram.js"></script>
     </body>
 </html>
