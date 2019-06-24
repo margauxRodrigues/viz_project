@@ -57,7 +57,8 @@ var containerHeight_barchart = parentDiv_barchart.clientHeight;
 
 // Construction hiérarchie
 const levels_bubble = ["region", "sex"]
-const filtre_region_default = ["ile de France", "Champagne-Ardenne ", "Picardie ", "Haute-Normandie ", "Centre  ", "Basse-Normandie ", "Bourgogne ", "Lorraine ", "Alsace ", "Franche-Comte ", "Pays de la Loire ", "Bretagne ", "Poitou-Charentes ", "Aquitaine ", "Midi-Pyrenees ", "Limousin ", "Rhone-Alpes ",  "Auvergne ", "Nord - Pas-de-Calais ", "Languedoc-Roussillon ", "Provence-Alpes-Cote d'Azur ", "Corse "]
+const filtre_region_default = ["France"]
+// ["ile de France", "Champagne-Ardenne ", "Picardie ", "Haute-Normandie ", "Centre  ", "Basse-Normandie ", "Bourgogne ", "Lorraine ", "Alsace ", "Franche-Comte ", "Pays de la Loire ", "Bretagne ", "Poitou-Charentes ", "Aquitaine ", "Midi-Pyrenees ", "Limousin ", "Rhone-Alpes ",  "Auvergne ", "Nord - Pas-de-Calais ", "Languedoc-Roussillon ", "Provence-Alpes-Cote d'Azur ", "Corse "]
 const levels_sunburst = [ "icd10_1", "icd10_2", "maladies"]
 var hierarchy_bubble;
 var hierarchy_sunburst;
@@ -65,7 +66,7 @@ var filtre_regions;
 
 setTimeout(function(){
     var filt_data_bubble = data.filter(function(row){
-        return (row["sex"] !== "T") && (row["maladies"] !== row["icd10_2"]) && (row["maladies"]!=="Toutes causes de mortalite") && (row["region"]!=="France") &&  (filtre_region_default.indexOf(row["region"]) !== -1);})
+        return (row["sex"] !== "T") && (row["maladies"] !== row["icd10_2"]) && (row["maladies"]!=="Toutes causes de mortalite") && (row["region"]=="France") &&  (filtre_region_default.indexOf(row["region"]) !== -1);})
 
     var filt_data_sunburst = data.filter(function(row){
         return ((row["region"] == "France") && (row["maladies"]!=="Toutes causes de mortalite") && (row["sex"] == "T"));})
