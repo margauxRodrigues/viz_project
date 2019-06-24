@@ -76,7 +76,7 @@ R;A-R_V-Y;A_U;R;R;Symptemes, signes et resultats anormaux d'examens cliniques et
 R95;A-R_V-Y;A_U;R;R95;Syndrome de la mort subite du nourrisson
 R96-R99;A-R_V-Y;A_U;R;R96-R99;Causes inconnues ou non precisees de mortalite
 R_OTH;A-R_V-Y;A_U;R;R_OTH;Autres symptemes, signes et resultats anormaux d'examens cliniques et de laboratoire (partie restante de R00-R99)
-V01-Y89;A-R_V-Y;V_Y_OTH;V_Y_OTH;V01-Y89;Causes externes de morbidite et mortalite (V01-Y89)
+V01-Y89;A-R_V-Y;V_Y_OTH;V_Y;V01-Y89;Causes externes de morbidite et mortalite (V01-Y89)
 ACC;A-R_V-Y;V_Y_OTH;V_Y_OTH;ACC;Accidents (V01-X59, Y85, Y86)
 V_Y85;A-R_V-Y;V_Y_OTH;V_Y_OTH;V_Y85;Accidents de transport (V01-V99, Y85)
 ACC_OTH;A-R_V-Y;V_Y_OTH;V_Y_OTH;ACC_OTH;Autres accidents (W20-W64, W75-X39, X50-X59, Y86)
