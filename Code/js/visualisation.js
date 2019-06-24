@@ -7,7 +7,7 @@ var vSlices;
 var subset;
 var previouscliked;
 var sliceSelected = false;
-
+var output;
 var test;
 // ------------- LECTURE DU CSV ---------------------------
 d3.csv("data/data_fr.csv")
@@ -62,8 +62,18 @@ setTimeout(function(){
         zoom(hierarchy_bubble);
     });
             console.log(hierarchy_sunburst)
+    output = d3.rollups(
+        data,
+        xs => d3.sum(xs, x => x.y2015),
+        d =>  d.icd10_2
+    )
+    .map(([k, v]) => ({ Maladie: k, Value: v }))
+    console.log(output)
+    
+
     drawViz(hierarchy_bubble)
     drawViz2(hierarchy_sunburst)
+    drawBarChart(output)
     /* drawViz3(filt_data_barchart) */
     },1000);
 
@@ -232,6 +242,74 @@ function drawViz2(data) {
 
 }
 
+var parentDiv = document.getElementById("barchart")
+var containerWidth = parentDiv.clientWidth;
+var containerHeight = parentDiv.clientHeight;
+
+var g3 = d3.select("#barchart")
+            .append("svg")
+              .attr("width", containerWidth )
+              .attr("height", 2 * containerHeight)
+            .append("g")
+              .attr("height", 2 * containerHeight )
+              .attr("transform", "translate(-2,40)");
+                  
+function drawBarChart(data){
+    console.log("coucou")
+    var max = d3.max(data, function(d){ return d.Value  ; });  
+  
+    var BandScale = d3.scaleBand()
+            .range([0, 2 * containerHeight - 80 ])
+            .padding(0.1)
+            .domain(data.map(function(d) { return d.Maladie; }));
+  
+    var y = d3.scaleLinear()
+            .range([0.80 * containerHeight, 0])
+            .domain([0, d3.max(data, function(d) { return d.Value; })]);
+     
+    // definition de  X axis
+    var xAxis = d3.scaleLinear()
+      .domain([0, max])
+      .range([ 280, 0]);
+    
+    // definition de Y axis
+    var yAxis = d3.scaleBand()
+      .domain(data.map(function(d) { return d.Maladie; }))
+      .range([ 0, 2 * containerHeight - 60])
+      .padding(.5);
+  
+  
+  
+    
+    
+    // mise en place de l'echelle des abscisses - X
+    g3.append("g")
+      .call(d3.axisBottom(xAxis))
+      .selectAll("text")
+      .attr("transform", "translate(0,-35)rotate(-65)")
+      .style("text-anchor", "end");
+  
+  
+      // Affichage des Bars
+      
+      g3.selectAll("myRect")
+        .data(data)
+        .enter()
+        .append("rect")
+        .attr("x",  function(d) { return y(d.Value); })
+        .attr("y",function(d) { return BandScale(d.Maladie); } )
+        .attr("width",(function(d) { return ((d.Value * containerHeight / max )); }) )
+        .attr("height", BandScale.bandwidth() )
+        .style("fill", "#666");
+  
+    // Mise en plase de l'echelle des ordonnees - Y
+        g3.append("g")
+          .call(d3.axisLeft(yAxis))
+         // .attr("height", containerHeight/2 )
+          .attr("transform", "translate(288,-10)")
+  
+      }
+
 function computeTextRotation(d) {
     var angle = (d.x0 + d.x1) / Math.PI * 90;
 
@@ -390,62 +468,5 @@ function highlightSelectedSlice(c,i) {
 
 // ---------------------------------------BARCHART-------------------------------------
 
-/* 
-// append the svg object to the body of the page
-var g3 = d3.select("#barchart")
-  .append("svg")
-    .attr("width", containerWidth )
-    .attr("height", containerHeight)
-  .append("g")
-    .attr("height",  containerHeight )
-    .attr("transform", "translate(20,5)");
 
 
-
-function drawViz3(data) {
-    // Add X axis
-    var x = d3.scaleLinear()
-        .domain([0, d3.max(data, function(d){ return d.y2015  ; }) + 20])
-        .range([ 0, 280]);
-    svg.append("g")
-        .call(d3.axisBottom(x))
-        .selectAll("text")
-        .attr("transform", "translate(-10,0)rotate(-45)")
-        .style("text-anchor", "end");
-
-    // Y axis
-    console.log(d3.min(data, function(d){ return d.y2015; }))
-    var y = d3.scaleBand()
-        .domain(data.map(function(d) { return d.icd10_niv_2; }))
-        .range([ 0, 2 * containerHeight - 20])
-        .padding(.5);
-    svg.append("g")
-        .call(d3.axisLeft(y))
-    //Bars
-    console.log(data['2015'])
-    /* var sum_par_maladie =
-    d3.rollups(
-        data,
-        xs => d3.sum(xs, x => x.y2015),
-        d => d.icd10_niv_2
-    )
-    .map(([k, v]) => ({ icd10_niv_2: k, y2015: v }))
-
-    console.log(sum_par_maladie)
-    
-    svg.selectAll("myRect")
-    .data(data)
-    .enter()
-    .selectAll("text")
-    .attr("transform", "translate(10,0)")
-    .style("text-anchor", "end")
-    .append("rect")
-    .attr("transform", "translate(0," + 35 + ")")
-    .attr("x", x(0) )
-    .attr("y", function(d) { return y(d.icd10_niv_2); })
-    .attr("width", d3.sum((data,function(d) { return d.icd10_niv_2; }), (data, function(d){return d.y2015})))
-    .attr("height", y.bandwidth() )
-    .attr("fill", "#666")
-
-}
- */
