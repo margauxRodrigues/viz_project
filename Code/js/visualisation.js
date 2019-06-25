@@ -9,6 +9,7 @@ var previouscliked;
 var sliceSelected = false;
 var output;
 var test;
+var filt_data_cart;
 
 // ------------- LECTURE DU CSV ---------------------------
 d3.csv("data/data_fr.csv")
@@ -74,7 +75,6 @@ setTimeout(function(){
                 (row["maladies"] !== "Toutes causes de mortalite") &&
                 (row["icd10_1"] !== "Toutes causes de mortalite") &&
                 (row["icd10_2"] !== "Toutes causes de mortalite") &&
-
                 (row["maladies"] !== row["icd10_0"]);
       }); 
     
@@ -85,10 +85,18 @@ setTimeout(function(){
         (row["icd10_1"] !== row["icd10_0"]) &&
         (row["sex"] == "T");
     });
+    
     var filt_data_barchart = data.filter(function(row){
         return (row["sex"] == "T") &&
         (row["maladies"] !== "Toutes causes de mortalite") &&
         (row["region"] == "France")
+    })
+    
+    filt_data_cart = data.filter(function(row){
+        return (row["sex"] == "T") &&
+        (row["maladies"] == "Toutes causes de mortalite") &&
+        (row["region"] !== "France") &&
+        (row["geo1"] !== "") 
     })
     
     console.log(filt_data_barchart)
@@ -510,60 +518,60 @@ function drawCart(data) {
 
 
             // Scale region value
-            france["objects"]["poly"]["geometries"][fr2id["FR10"]]["properties"]["scale"] = 0.5; // Île-de-France
-            france["objects"]["poly"]["geometries"][fr2id["FR21"]]["properties"]["scale"] = 1; // Champagne Ardennes
-            france["objects"]["poly"]["geometries"][fr2id["FR22"]]["properties"]["scale"] = 1; // Picardie
-            france["objects"]["poly"]["geometries"][fr2id["FR23"]]["properties"]["scale"] = 1; // Haute Normandie
-            france["objects"]["poly"]["geometries"][fr2id["FR24"]]["properties"]["scale"] = 1.5; // Centre
-            france["objects"]["poly"]["geometries"][fr2id["FR25"]]["properties"]["scale"] = 1; // Basse Normandie
-            france["objects"]["poly"]["geometries"][fr2id["FR26"]]["properties"]["scale"] = 1; // Bourgogne
-            france["objects"]["poly"]["geometries"][fr2id["FR30"]]["properties"]["scale"] = 1; // Nord Pas de Calais
-            france["objects"]["poly"]["geometries"][fr2id["FR41"]]["properties"]["scale"] = 1.2; // Lorraine
-            france["objects"]["poly"]["geometries"][fr2id["FR42"]]["properties"]["scale"] = 0.6; // Alsace
-            france["objects"]["poly"]["geometries"][fr2id["FR43"]]["properties"]["scale"] = 0.8; // Franche Comté
-            france["objects"]["poly"]["geometries"][fr2id["FR51"]]["properties"]["scale"] = 1; // Pays de la Loire
-            france["objects"]["poly"]["geometries"][fr2id["FR52"]]["properties"]["scale"] = 1.5; // Bretagne
-            france["objects"]["poly"]["geometries"][fr2id["FR53"]]["properties"]["scale"] = 1; // Poitou Charente
-            france["objects"]["poly"]["geometries"][fr2id["FR61"]]["properties"]["scale"] = 2; // Aquitaine
-            france["objects"]["poly"]["geometries"][fr2id["FR62"]]["properties"]["scale"] = 2; // Midi Pyrénées
-            france["objects"]["poly"]["geometries"][fr2id["FR63"]]["properties"]["scale"] = 0.8; // Limousin
-            france["objects"]["poly"]["geometries"][fr2id["FR71"]]["properties"]["scale"] = 1.5; // Rhône-Alpes
-            france["objects"]["poly"]["geometries"][fr2id["FR72"]]["properties"]["scale"] = 1; // Auvergne
-            france["objects"]["poly"]["geometries"][fr2id["FR81"]]["properties"]["scale"] = 1.2; // Languedoc Rousillon
-            france["objects"]["poly"]["geometries"][fr2id["FR82"]]["properties"]["scale"] = 1; // Provence-Alpes-Côte d’Azur
-            france["objects"]["poly"]["geometries"][fr2id["FR83"]]["properties"]["scale"] = 0.5; // Corse
+            france["objects"]["poly"]["geometries"][fr2id["FR10"]]["properties"]["scale"] = 0.5*filt_data_cart[0].y2015; // Île-de-France
+            france["objects"]["poly"]["geometries"][fr2id["FR21"]]["properties"]["scale"] = 1*filt_data_cart[1].y2015; // Champagne Ardennes
+            france["objects"]["poly"]["geometries"][fr2id["FR22"]]["properties"]["scale"] = 1*filt_data_cart[2].y2015; // Picardie
+            france["objects"]["poly"]["geometries"][fr2id["FR23"]]["properties"]["scale"] = filt_data_cart[3].y2015; // Haute Normandie
+            france["objects"]["poly"]["geometries"][fr2id["FR24"]]["properties"]["scale"] = filt_data_cart[4].y2015; // Centre
+            france["objects"]["poly"]["geometries"][fr2id["FR25"]]["properties"]["scale"] = filt_data_cart[5].y2015; // Basse Normandie
+            france["objects"]["poly"]["geometries"][fr2id["FR26"]]["properties"]["scale"] = filt_data_cart[6].y2015; // Bourgogne
+            france["objects"]["poly"]["geometries"][fr2id["FR30"]]["properties"]["scale"] = filt_data_cart[7].y2015; // Nord Pas de Calais
+            france["objects"]["poly"]["geometries"][fr2id["FR41"]]["properties"]["scale"] = filt_data_cart[8].y2015; // Lorraine
+            france["objects"]["poly"]["geometries"][fr2id["FR42"]]["properties"]["scale"] = filt_data_cart[9].y2015; // Alsace
+            france["objects"]["poly"]["geometries"][fr2id["FR43"]]["properties"]["scale"] = filt_data_cart[10].y2015; // Franche Comté
+            france["objects"]["poly"]["geometries"][fr2id["FR51"]]["properties"]["scale"] = filt_data_cart[11].y2015; // Pays de la Loire
+            france["objects"]["poly"]["geometries"][fr2id["FR52"]]["properties"]["scale"] = filt_data_cart[12].y2015; // Bretagne
+            france["objects"]["poly"]["geometries"][fr2id["FR53"]]["properties"]["scale"] = filt_data_cart[13].y2015; // Poitou Charente
+            france["objects"]["poly"]["geometries"][fr2id["FR61"]]["properties"]["scale"] = filt_data_cart[14].y2015; // Aquitaine
+            france["objects"]["poly"]["geometries"][fr2id["FR62"]]["properties"]["scale"] = filt_data_cart[15].y2015; // Midi Pyrénées
+            france["objects"]["poly"]["geometries"][fr2id["FR63"]]["properties"]["scale"] = filt_data_cart[16].y2015; // Limousin
+            france["objects"]["poly"]["geometries"][fr2id["FR71"]]["properties"]["scale"] = filt_data_cart[17].y2015; // Rhône-Alpes
+            france["objects"]["poly"]["geometries"][fr2id["FR72"]]["properties"]["scale"] = filt_data_cart[18].y2015; // Auvergne
+            france["objects"]["poly"]["geometries"][fr2id["FR81"]]["properties"]["scale"] = filt_data_cart[19].y2015; // Languedoc Rousillon
+            france["objects"]["poly"]["geometries"][fr2id["FR82"]]["properties"]["scale"] = filt_data_cart[20].y2015; // Provence-Alpes-Côte d’Azur
+            france["objects"]["poly"]["geometries"][fr2id["FR83"]]["properties"]["scale"] = filt_data_cart[21].y2015; // Corse
 
 
             // Deaths value
-            france["objects"]["poly"]["geometries"][fr2id["FR10"]]["properties"]["deaths"] = 0.5; // Île-de-France
+            france["objects"]["poly"]["geometries"][fr2id["FR10"]]["properties"]["deaths"] = filt_data_cart[0].y2015; // Île-de-France
 
-            france["objects"]["poly"]["geometries"][fr2id["FR24"]]["properties"]["deaths"] = 1.7; // Centre
-            france["objects"]["poly"]["geometries"][fr2id["FR26"]]["properties"]["deaths"] = 1.5; // Bourgogne
-            france["objects"]["poly"]["geometries"][fr2id["FR25"]]["properties"]["deaths"] = 1.5; // Basse Normandie
-            france["objects"]["poly"]["geometries"][fr2id["FR23"]]["properties"]["deaths"] = 1.5; // Haute Normandie
-            france["objects"]["poly"]["geometries"][fr2id["FR22"]]["properties"]["deaths"] = 1.5; // Picardie
-            france["objects"]["poly"]["geometries"][fr2id["FR21"]]["properties"]["deaths"] = 2.2; // Champagne Ardennes
+            france["objects"]["poly"]["geometries"][fr2id["FR24"]]["properties"]["deaths"] = filt_data_cart[4].y2015; // Centre
+            france["objects"]["poly"]["geometries"][fr2id["FR26"]]["properties"]["deaths"] = filt_data_cart[6].y2015; // Bourgogne
+            france["objects"]["poly"]["geometries"][fr2id["FR25"]]["properties"]["deaths"] = filt_data_cart[5].y2015; // Basse Normandie
+            france["objects"]["poly"]["geometries"][fr2id["FR23"]]["properties"]["deaths"] = filt_data_cart[3].y2015; // Haute Normandie
+            france["objects"]["poly"]["geometries"][fr2id["FR22"]]["properties"]["deaths"] = filt_data_cart[2].y2015; // Picardie
+            france["objects"]["poly"]["geometries"][fr2id["FR21"]]["properties"]["deaths"] = filt_data_cart[1].y2015; // Champagne Ardennes
 
-            france["objects"]["poly"]["geometries"][fr2id["FR30"]]["properties"]["deaths"] = 0.3; // Nord Pas de Calais
+            france["objects"]["poly"]["geometries"][fr2id["FR30"]]["properties"]["deaths"] = filt_data_cart[7].y2015; // Nord Pas de Calais
 
-            france["objects"]["poly"]["geometries"][fr2id["FR41"]]["properties"]["deaths"] = 0.3; // Lorraine
-            france["objects"]["poly"]["geometries"][fr2id["FR42"]]["properties"]["deaths"] = 0.3; // Alsace
-            france["objects"]["poly"]["geometries"][fr2id["FR43"]]["properties"]["deaths"] = 0.3; // Franche Comté
+            france["objects"]["poly"]["geometries"][fr2id["FR41"]]["properties"]["deaths"] = filt_data_cart[8].y2015; // Lorraine
+            france["objects"]["poly"]["geometries"][fr2id["FR42"]]["properties"]["deaths"] = filt_data_cart[9].y2015; // Alsace
+            france["objects"]["poly"]["geometries"][fr2id["FR43"]]["properties"]["deaths"] = filt_data_cart[10].y2015; // Franche Comté
 
-            france["objects"]["poly"]["geometries"][fr2id["FR51"]]["properties"]["deaths"] = 1.5; // Pays de la Loire
-            france["objects"]["poly"]["geometries"][fr2id["FR52"]]["properties"]["deaths"] = 1.2; // Bretagne
-            france["objects"]["poly"]["geometries"][fr2id["FR53"]]["properties"]["deaths"] = 1.2; // Poitou Charente
+            france["objects"]["poly"]["geometries"][fr2id["FR51"]]["properties"]["deaths"] = filt_data_cart[11].y2015; // Pays de la Loire
+            france["objects"]["poly"]["geometries"][fr2id["FR52"]]["properties"]["deaths"] = filt_data_cart[12].y2015; // Bretagne
+            france["objects"]["poly"]["geometries"][fr2id["FR53"]]["properties"]["deaths"] = filt_data_cart[13].y2015; // Poitou Charente
 
-            france["objects"]["poly"]["geometries"][fr2id["FR61"]]["properties"]["deaths"] = 2.7; // Aquitaine
-            france["objects"]["poly"]["geometries"][fr2id["FR62"]]["properties"]["deaths"] = 2.5; // Midi Pyrénées
-            france["objects"]["poly"]["geometries"][fr2id["FR63"]]["properties"]["deaths"] = 2.5; // Limousin
+            france["objects"]["poly"]["geometries"][fr2id["FR61"]]["properties"]["deaths"] = filt_data_cart[14].y2015; // Aquitaine
+            france["objects"]["poly"]["geometries"][fr2id["FR62"]]["properties"]["deaths"] = filt_data_cart[15].y2015; // Midi Pyrénées
+            france["objects"]["poly"]["geometries"][fr2id["FR63"]]["properties"]["deaths"] = filt_data_cart[16].y2015; // Limousin
 
-            france["objects"]["poly"]["geometries"][fr2id["FR71"]]["properties"]["deaths"] = 2.2; // Rhône-Alpes
-            france["objects"]["poly"]["geometries"][fr2id["FR72"]]["properties"]["deaths"] = 2.2;  // Auvergne
+            france["objects"]["poly"]["geometries"][fr2id["FR71"]]["properties"]["deaths"] = filt_data_cart[17].y2015; // Rhône-Alpes
+            france["objects"]["poly"]["geometries"][fr2id["FR72"]]["properties"]["deaths"] = filt_data_cart[18].y2015;  // Auvergne
 
-            france["objects"]["poly"]["geometries"][fr2id["FR81"]]["properties"]["deaths"] = 1.5; // Languedoc Rousillon
-            france["objects"]["poly"]["geometries"][fr2id["FR82"]]["properties"]["deaths"] = 1.5; // Provence-Alpes-Côte d’Azur
-            france["objects"]["poly"]["geometries"][fr2id["FR83"]]["properties"]["deaths"] = 0.3; // Corse
+            france["objects"]["poly"]["geometries"][fr2id["FR81"]]["properties"]["deaths"] = filt_data_cart[19].y2015; // Languedoc Rousillon
+            france["objects"]["poly"]["geometries"][fr2id["FR82"]]["properties"]["deaths"] = filt_data_cart[20].y2015; // Provence-Alpes-Côte d’Azur
+            france["objects"]["poly"]["geometries"][fr2id["FR83"]]["properties"]["deaths"] = filt_data_cart[21].y2015; // Corse
 
             console.log(france);
 
