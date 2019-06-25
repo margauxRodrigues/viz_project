@@ -60,21 +60,23 @@ var containerWidth_barchart = parentDiv_barchart.clientWidth;
 var containerHeight_barchart = parentDiv_barchart.clientHeight;
 
 // Construction hiérarchie
-const levels_bubble = ["region", "sex"]
-const filtres_bubble = ["Basse-Normandie ", "Auvergne ", "Nord - Pas-de-Calais "]
+const levels_bubble = ["region", "sex", "maladies"]
+const filtres_bubble = ["France"]
 const levels_sunburst = ["icd10_1", "icd10_2"]
 var hierarchy_bubble;
 var hierarchy_sunburst;
 
 setTimeout(function(){
     var filt_data_bubble = data.filter(function(row){
-        return (row["region"]!=="FR") && 
+        return (row["region"] !== "France") && 
 /*                 (filtres_bubble.indexOf(row["region"]) !== -1) && */
                 (row["sex"] !== "T") && 
                 (row["maladies"] !== row["icd10_1"]) &&
                 (row["maladies"] !== "Toutes causes de mortalite") &&
                 (row["icd10_1"] !== "Toutes causes de mortalite") &&
                 (row["icd10_2"] !== "Toutes causes de mortalite") &&
+                (row["icd10_1"] !== row["icd10_2"]) &&
+                (row["icd10_2"] !== row["maladies"]) &&
                 (row["maladies"] !== row["icd10_0"]);
       }); 
     
