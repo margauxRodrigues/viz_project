@@ -13,7 +13,7 @@ body {
   justify-content: center;
   font-family: 'STARWARS';
   background: url('images/black_font.jpg') no-repeat;
-  background-size: 100%;
+  background-size: 120%;
   background-position: top center;
   z-index: -1;
   margin: 0;
@@ -130,6 +130,7 @@ body {
   max-width: 350px;
   min-height: 350px;
   max-height: 350px;
+  margin: 10 0 0 0px;
 }
 
 #viz {
