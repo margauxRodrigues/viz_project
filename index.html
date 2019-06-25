@@ -11,14 +11,10 @@
     </head>
     <body>
         
-        <div id="main" name="main" style="width:1400px; height:120vh">
-            <div id="left" name="left" style="width:30%;height:100%">
-                <div id="top" name="top" style="width:100%;height:50%">
-                        <div id="sunburst" name="sunburst" style="width:100%;height:100%"></div>
-                </div>
-                <div id="bottom" name="bottom" style="width:100%;height:50%"> 
-                    <div id="bubble" style="width:100%;height:100%"></div>      
-                </div>
+        <div id="main" name="main" style="width:1400px; height:100vh">
+            <div id="top" name="top" style="width:100%;height:100%">
+            <div id="top" name="top" style="width:100%;height:100%">
+                <div id="sunburst" name="sunburst" style="width:100%;height:100%"></div>
             </div>
             <div id="center" name="center" style="width:50%;height:100%">
                 <div id="france" name="france" style="width:100%;height:100%"></div>
@@ -26,6 +22,21 @@
             <div id="barchart" name="barchart" style="width:20%"></div>
         </div>
         <script type = "text/javascript" src = "Code/js/visualisation.js"></script>
-        <script type = "text/javascript" src = "Code/js/cartogram.js"></script>
+
+        <script>
+            d3.json('./Code/json/france.json', (error, france) => {
+            if (error) throw error;
+            console.log(france);
+
+            Cartogram()
+                .topoJson(france)
+                .topoObjectName('regions')
+                .iterations(120)
+                .valFormatter(d3.format(".3s"))
+                .projection(d3.geoMercator().scale(2500).translate([220, 2700]))
+                (document.getElementById('france'));
+            });
+
+        </script>
     </body>
 </html>
