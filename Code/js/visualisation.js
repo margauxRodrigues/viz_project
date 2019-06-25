@@ -20,8 +20,8 @@ d3.csv("data/data_fr.csv")
         geo1: d.geo_niv_1,
         test: d.nom_geo_niv_1,
         //geo2: d.geo_niv_2,
-        icd10_0: d.icd10_nom_niv_1,
-        icd10_1: d["icd10_nom_niv_1.1"],
+        icd10_0: d.icd10_nom_niv_0,
+        icd10_1: d.icd10_nom_niv_1,
         icd10_2: d.icd10_nom_niv_2,
         maladies:d.maladies,
         region:d.region,
@@ -67,15 +67,26 @@ var hierarchy_sunburst;
 
 setTimeout(function(){
     var filt_data_bubble = data.filter(function(row){
-        return (row["region"]!=="FR") && (filtres_bubble.indexOf(row["region"]) !== -1);
+        return (row["region"]!=="FR") && 
+                (filtres_bubble.indexOf(row["region"]) !== -1) &&
+                (row["sex"] !== "T") && 
+                (row["maladies"] !== row["icd10_1"]) &&
+                (row["maladies"] !== row["icd10_0"]);
       }); 
     
+    var filt_data_sunburst = data.filter(function(row){
+        return (row["region"] == "France") &&
+        (row["maladies"] !== row["icd10_1"]) &&
+        (row["icd10_1"] !== row["icd10_2"]) &&
+        (row["icd10_1"] !== row["icd10_0"]) &&
+        (row["sex"] == "T");
+    });
     /* var filt_data_barchart = data.filter(function(row){
         return (row)
     })
     */
     hierarchy_bubble = flatToHierarchyBubble(filt_data_bubble, levels_bubble, 'maladies', 'y2015')
-    hierarchy_sunburst = flatToHierarchy(filt_data_bubble, levels_sunburst, 'maladies', 'y2015', 'maladies')
+    hierarchy_sunburst = flatToHierarchy(filt_data_sunburst, levels_sunburst, 'maladies', 'y2015', 'maladies')
     console.log(hierarchy_bubble)
     focus = hierarchy_bubble;
     //console.log(d3.pack(hierarchy))
