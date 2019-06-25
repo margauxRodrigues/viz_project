@@ -68,7 +68,7 @@ var hierarchy_sunburst;
 setTimeout(function(){
     var filt_data_bubble = data.filter(function(row){
         return (row["region"]!=="FR") && 
-                (filtres_bubble.indexOf(row["region"]) !== -1) &&
+/*                 (filtres_bubble.indexOf(row["region"]) !== -1) && */
                 (row["sex"] !== "T") && 
                 (row["maladies"] !== row["icd10_1"]) &&
                 (row["maladies"] !== "Toutes causes de mortalite") &&
@@ -274,7 +274,7 @@ function drawBarChart(data){
     // definition de Y axis
     var yAxis = d3.scaleBand()
     .domain(data.map(function(d) { return d.Maladie; }))
-    .range([containerHeight_barchart - 60, 0])
+    .range([0, containerHeight_barchart - 60])
     .padding(.5);
 
     // mise en place de l'echelle des abscisses - X
@@ -282,8 +282,14 @@ function drawBarChart(data){
     .call(d3.axisBottom(xAxis))
     .selectAll("text")
     .attr("transform", "translate(0,-35)rotate(-65)")
-    .style("text-anchor", "end");
+    .style("text-anchor", "end")
+    .style("fill", "#FFDE06");
   
+    // Define the div for the tooltip
+    var divT = d3.select("body").append("div")	
+    .attr("class", "tooltip")				
+    .style("opacity", 0);
+    
       // Affichage des Bars
     g3.selectAll("myRect")
     .data(data)
@@ -294,18 +300,24 @@ function drawBarChart(data){
     .attr("width",(function(d) { return (xAxis(0) - xAxis(d.Value)); }) )
     .attr("height", BandScale.bandwidth() )
     .style("fill", "#666")
-    .on("mouseover", function(d){
-        tooltip
-          .style("left", d3.event.pageX - 50 + "px")
-          .style("top", d3.event.pageY - 70 + "px")
-          .style("display", "inline-block")
-          .html((d.Maladie) + "<br>" + (d.Value));
-    })
-    .on("mouseout", function(d){ tooltip.style("display", "none");});
+    .on("mouseover", function(d) {		
+        divT.transition()		
+            .duration(200)		
+            .style("opacity", .9)		
+        divT.html((d.Maladie) + "<br>" + (d.Value))	
+            .style("left", (d3.event.pageX-280) + "px")		
+            .style("top", (d3.event.pageY - 28) + "px");	
+        })					
+    .on("mouseout", function(d) {		
+        divT.transition()		
+            .duration(500)		
+            .style("opacity", 0);	
+    });
+    
     // Mise en plase de l'echelle des ordonnees - Y
         g3.append("g")
           .call(d3.axisLeft(yAxis))
-         // .attr("height", containerHeight/2 )
+          .attr("class", "axisYellow")
           .attr("transform", "translate(288,-10)")
   
       }
@@ -437,7 +449,7 @@ function highlightSelectedSlice(c,i) {
             if (clicked.height == 1 ){
             var filt_data_bubble = data.filter(function(row){
                 return (row["sex"] !== "T") && (row["maladies"] !== "Toutes causes de mortalite") && (row["region"]!=="FR")&& (row["icd10_1"] !== "Toutes causes de mortalite") &&
-                (row["icd10_2"] !== "Toutes causes de mortalite") && (filtres_bubble.indexOf(row["region"]) !== -1) && (filtres_bubble_maladie.indexOf(row['icd10_2']) !== -1);
+                (row["icd10_2"] !== "Toutes causes de mortalite") &&  (filtres_bubble_maladie.indexOf(row['icd10_2']) !== -1);
                 }); 
                 hierarchy_bubble = flatToHierarchyBubble(filt_data_bubble, levels_bubble, 'maladies', 'y2015');
                 drawViz(hierarchy_bubble);
@@ -445,7 +457,7 @@ function highlightSelectedSlice(c,i) {
             else if (clicked.height == 2 ){
                 var filt_data_bubble = data.filter(function(row){
                     return (row["sex"] !== "T") && (row["maladies"] !== "Toutes causes de mortalite") && (row["region"]!=="FR") && (row["icd10_1"] !== "Toutes causes de mortalite") &&
-                    (row["icd10_2"] !== "Toutes causes de mortalite") &&(filtres_bubble.indexOf(row["region"]) !== -1) && (filtres_bubble_maladie.indexOf(row['icd10_1']) !== -1);
+                    (row["icd10_2"] !== "Toutes causes de mortalite")  && (filtres_bubble_maladie.indexOf(row['icd10_1']) !== -1);
                     }); 
                     hierarchy_bubble = flatToHierarchyBubble(filt_data_bubble, levels_bubble, 'maladies', 'y2015')
                     drawViz(hierarchy_bubble)
@@ -453,7 +465,7 @@ function highlightSelectedSlice(c,i) {
             else if (clicked.height == 0 ){
                 var filt_data_bubble = data.filter(function(row){
                     return (row["sex"] !== "T") && (row["maladies"] !== "Toutes causes de mortalite") && (row["region"]!=="FR") && (row["icd10_1"] !== "Toutes causes de mortalite") &&
-                    (row["icd10_2"] !== "Toutes causes de mortalite") &&(filtres_bubble.indexOf(row["region"]) !== -1) && (filtres_bubble_maladie.indexOf(row['maladies']) !== -1);
+                    (row["icd10_2"] !== "Toutes causes de mortalite")  && (filtres_bubble_maladie.indexOf(row['maladies']) !== -1);
                     }); 
                     hierarchy_bubble = flatToHierarchyBubble(filt_data_bubble, levels_bubble, 'maladies', 'y2015')
                     drawViz(hierarchy_bubble)
@@ -463,7 +475,7 @@ function highlightSelectedSlice(c,i) {
         else{
             var filt_data_bubble = data.filter(function(row){
                 return (row["sex"] !== "T") && (row["icd10_1"] !== "Toutes causes de mortalite") &&
-                (row["icd10_2"] !== "Toutes causes de mortalite") &&(row["maladies"] !== "Toutes causes de mortalite") &&(row["region"]!=="FR") && (filtres_bubble.indexOf(row["region"]) !== -1);
+                (row["icd10_2"] !== "Toutes causes de mortalite") &&(row["maladies"] !== "Toutes causes de mortalite") &&(row["region"]!=="FR") ;
                 }); 
                 hierarchy_bubble = flatToHierarchyBubble(filt_data_bubble, levels_bubble, 'maladies', 'y2015');
                 drawViz(hierarchy_bubble);

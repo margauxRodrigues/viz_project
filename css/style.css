@@ -178,12 +178,16 @@ div.tooltip {
   text-align: center;
   align-items: center;
   align-content: center;
-  width: 100px;
-  height: 28px;
-  padding: 2px;
-  font: 6px sans-serif;
+  width: 250px;
+  height: 62px;
+  padding: 5px 0;
+  font: 15px sans-serif;
   background: lightsteelblue;
   border: 0px;
   border-radius: 8px;
   pointer-events: none;
+}
+
+.axisYellow {
+  stroke : #FFDE06;
 }
