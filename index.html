@@ -1,61 +1,34 @@
 <html>
-
-<head>
-    <meta charset="utf-8">
-    <script src="https://d3js.org/d3.v4.min.js"></script>
-    <script src="https://d3js.org/d3-array.v2.min.js"></script>
-    <script src="//unpkg.com/cartogram-chart"></script>
-    <script src="./Code/js/scale-chromatic/d3-scale-chromatic.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="/css/style.css">
-    <title>DEATH STAR</title>
-</head>
-
-<body>
-    <div id="bloc_page">
-
-        <header id="header">
-            <h1 id="titre">DEATH STAR</h1>
-            <div id="logo">
-                <img src="css/images/deathStar.png" alt="logo du site">
-            </div>
-        </header id="header">
-
-        <div id="main" name="main" style="width:1400px; height:100vh">
-
-            <div id="left" name="left" style="width:100%;height:100%">
+    <head>
+        <meta charset="utf-8">
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+        <script type="text/javascript" src="/Code/js/crossfilter-master/crossfilter.min.js"></script>
+        <script type="text/javascript" src = "/Code/js/dc/dc.min.js"></script>
+        <script src="https://d3js.org/d3-array.v2.min.js"></script>
+        <script src="//unpkg.com/cartogram-chart"></script>
+        <script src="./Code/js/scale-chromatic/d3-scale-chromatic.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="/css/style.css">
+        <title>DEATH NOTE</title>
+    </head>
+    <body>
+        
+    <div id="main" name="main" style="width:1400px; height:100vh">
+        <div id="left" name="left" style="width:30%;height:100%">
+            <div id="top" name="top" style="width:100%;height:50%">
                 <div id="sunburst" name="sunburst" style="width:100%;height:100%"></div>
-                <div id="bubble" style="width:70%;height:70%"></div>
             </div>
-
-            <div id="center" name="center" style="width:100%;height:100%">
-                <div id="france" name="france" style="width:100%;height:100%"></div>
+            <div id="bottom" name="bottom" style="width:100%;height:50%">
+                <div id="bubble" style="width:100%;height:100%"></div>
             </div>
-
-            <div id="right" name="right">
-                <div id="barchart" name="barchart"></div>
-            </div>
-
         </div>
+        <div id="center" name="center" style="width:50%;height:100%">
+            <div id="france" name="france" style="width:100%;height:100%"></div>
+        </div>
+        <div id="barchart" name="barchart" style="width:20%"></div>
     </div>
     <script type="text/javascript" src="Code/js/visualisation.js"></script>
-    <script type="text/javascript" src="Code/js/cartogram.js"></script>
+       <!-- <script type = "text/javascript" src = "Code/js/cartogram.js"></script> -->
 
 
-    <!-- <script>
-            d3.json('./Code/json/france.json', (error, france) => {
-                if (error) throw error;
-                console.log(france);
-
-                Cartogram()
-                    .topoJson(france)
-                    .topoObjectName('regions')
-                    .iterations(120)
-                    .valFormatter(d3.format(".3s"))
-                    .projection(d3.geoMercator().scale(2500).translate([220, 2700]))
-                    (document.getElementById('france'));
-            });
-
-        </script> -->
-</body>
-
+    </body>
 </html>

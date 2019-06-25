@@ -110,6 +110,7 @@ setTimeout(function(){
     drawViz(hierarchy_bubble)
     drawViz2(hierarchy_sunburst)
     drawBarChart(output)
+    drawCart(data)
     /* drawViz3(filt_data_barchart) */
     },1000);
 
@@ -494,5 +495,91 @@ function showtextSunburst(d){
 }
 
 
+function drawCart(data) {
+    const fr2id ={"FR42":0, "FR61":1, "FR72":2, "FR25":3, "FR26":4, "FR52":5, "FR24":6, "FR21":7, "FR83":8, "FR43":9,
+    "FR23":10, "FR10":11, "FR81":12, "FR63":13, "FR41":14, "FR62":15, "FR30":16, "FR51":17, "FR22":18, "FR53":19, "FR82":20, "FR71":21 };
+
+        d3.json('./Code/json/france2.json', (error, france) => {
+            if (error) throw error;
 
 
+            // Scale region value
+            france["objects"]["poly"]["geometries"][fr2id["FR10"]]["properties"]["scale"] = 0.5; // Île-de-France
+            france["objects"]["poly"]["geometries"][fr2id["FR21"]]["properties"]["scale"] = 1; // Champagne Ardennes
+            france["objects"]["poly"]["geometries"][fr2id["FR22"]]["properties"]["scale"] = 1; // Picardie
+            france["objects"]["poly"]["geometries"][fr2id["FR23"]]["properties"]["scale"] = 1; // Haute Normandie
+            france["objects"]["poly"]["geometries"][fr2id["FR24"]]["properties"]["scale"] = 1.5; // Centre
+            france["objects"]["poly"]["geometries"][fr2id["FR25"]]["properties"]["scale"] = 1; // Basse Normandie
+            france["objects"]["poly"]["geometries"][fr2id["FR26"]]["properties"]["scale"] = 1; // Bourgogne
+            france["objects"]["poly"]["geometries"][fr2id["FR30"]]["properties"]["scale"] = 1; // Nord Pas de Calais
+            france["objects"]["poly"]["geometries"][fr2id["FR41"]]["properties"]["scale"] = 1.2; // Lorraine
+            france["objects"]["poly"]["geometries"][fr2id["FR42"]]["properties"]["scale"] = 0.6; // Alsace
+            france["objects"]["poly"]["geometries"][fr2id["FR43"]]["properties"]["scale"] = 0.8; // Franche Comté
+            france["objects"]["poly"]["geometries"][fr2id["FR51"]]["properties"]["scale"] = 1; // Pays de la Loire
+            france["objects"]["poly"]["geometries"][fr2id["FR52"]]["properties"]["scale"] = 1.5; // Bretagne
+            france["objects"]["poly"]["geometries"][fr2id["FR53"]]["properties"]["scale"] = 1; // Poitou Charente
+            france["objects"]["poly"]["geometries"][fr2id["FR61"]]["properties"]["scale"] = 2; // Aquitaine
+            france["objects"]["poly"]["geometries"][fr2id["FR62"]]["properties"]["scale"] = 2; // Midi Pyrénées
+            france["objects"]["poly"]["geometries"][fr2id["FR63"]]["properties"]["scale"] = 0.8; // Limousin
+            france["objects"]["poly"]["geometries"][fr2id["FR71"]]["properties"]["scale"] = 1.5; // Rhône-Alpes
+            france["objects"]["poly"]["geometries"][fr2id["FR72"]]["properties"]["scale"] = 1; // Auvergne
+            france["objects"]["poly"]["geometries"][fr2id["FR81"]]["properties"]["scale"] = 1.2; // Languedoc Rousillon
+            france["objects"]["poly"]["geometries"][fr2id["FR82"]]["properties"]["scale"] = 1; // Provence-Alpes-Côte d’Azur
+            france["objects"]["poly"]["geometries"][fr2id["FR83"]]["properties"]["scale"] = 0.5; // Corse
+
+
+            // Deaths value
+            france["objects"]["poly"]["geometries"][fr2id["FR10"]]["properties"]["deaths"] = 0.5; // Île-de-France
+
+            france["objects"]["poly"]["geometries"][fr2id["FR24"]]["properties"]["deaths"] = 1.7; // Centre
+            france["objects"]["poly"]["geometries"][fr2id["FR26"]]["properties"]["deaths"] = 1.5; // Bourgogne
+            france["objects"]["poly"]["geometries"][fr2id["FR25"]]["properties"]["deaths"] = 1.5; // Basse Normandie
+            france["objects"]["poly"]["geometries"][fr2id["FR23"]]["properties"]["deaths"] = 1.5; // Haute Normandie
+            france["objects"]["poly"]["geometries"][fr2id["FR22"]]["properties"]["deaths"] = 1.5; // Picardie
+            france["objects"]["poly"]["geometries"][fr2id["FR21"]]["properties"]["deaths"] = 2.2; // Champagne Ardennes
+
+            france["objects"]["poly"]["geometries"][fr2id["FR30"]]["properties"]["deaths"] = 0.3; // Nord Pas de Calais
+
+            france["objects"]["poly"]["geometries"][fr2id["FR41"]]["properties"]["deaths"] = 0.3; // Lorraine
+            france["objects"]["poly"]["geometries"][fr2id["FR42"]]["properties"]["deaths"] = 0.3; // Alsace
+            france["objects"]["poly"]["geometries"][fr2id["FR43"]]["properties"]["deaths"] = 0.3; // Franche Comté
+
+            france["objects"]["poly"]["geometries"][fr2id["FR51"]]["properties"]["deaths"] = 1.5; // Pays de la Loire
+            france["objects"]["poly"]["geometries"][fr2id["FR52"]]["properties"]["deaths"] = 1.2; // Bretagne
+            france["objects"]["poly"]["geometries"][fr2id["FR53"]]["properties"]["deaths"] = 1.2; // Poitou Charente
+
+            france["objects"]["poly"]["geometries"][fr2id["FR61"]]["properties"]["deaths"] = 2.7; // Aquitaine
+            france["objects"]["poly"]["geometries"][fr2id["FR62"]]["properties"]["deaths"] = 2.5; // Midi Pyrénées
+            france["objects"]["poly"]["geometries"][fr2id["FR63"]]["properties"]["deaths"] = 2.5; // Limousin
+
+            france["objects"]["poly"]["geometries"][fr2id["FR71"]]["properties"]["deaths"] = 2.2; // Rhône-Alpes
+            france["objects"]["poly"]["geometries"][fr2id["FR72"]]["properties"]["deaths"] = 2.2;  // Auvergne
+
+            france["objects"]["poly"]["geometries"][fr2id["FR81"]]["properties"]["deaths"] = 1.5; // Languedoc Rousillon
+            france["objects"]["poly"]["geometries"][fr2id["FR82"]]["properties"]["deaths"] = 1.5; // Provence-Alpes-Côte d’Azur
+            france["objects"]["poly"]["geometries"][fr2id["FR83"]]["properties"]["deaths"] = 0.3; // Corse
+
+            console.log(france);
+
+            const colorScale  = d3.scaleLinear()
+                                    .domain([0,1,100,1000,15999,16000])
+                                    .range([...d3.schemeRdBu[11]]);
+
+            console.log(colorScale(100));
+
+            Cartogram()
+                .topoJson(france)
+                .topoObjectName('countries')
+                .iterations(120)
+                .value(({ properties }) => properties.scale)
+                .color(({ properties: { deaths } }) => colorScale(deaths))
+                .projection(d3.geoMercator().scale(2500).translate([220, 2700]))
+                .label(({ properties: p }) => `Nombre de mort ${p.deaths}`)
+                .valFormatter(d3.format(".3s"))
+                (document.getElementById('france'));
+
+        });
+
+
+
+}
