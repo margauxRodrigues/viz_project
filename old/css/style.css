@@ -1,0 +1,117 @@
+body {
+    display: flex;
+    justify-content: center;
+  }
+
+  #main {
+    display: flex;
+    justify-content: space-around;
+    border-style: solid;
+  }
+  #left {
+    flex-direction: column;
+    justify-content: space-around;
+  }
+
+  #barchart {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  #center {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+  
+  #top {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+  #sunburst {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  #france {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  #bottom {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+  }
+
+  #bubble {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+  }
+
+
+
+  h1 {
+    text-align: center;
+  }
+
+  h2 {
+    text-align: center;
+  }
+
+  #viz {
+    background-color: white;
+    display: flex;
+    justify-content: center;
+  }
+
+  #legend {
+      background-color: orange
+  }
+
+
+  #color_map_button {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  #picto_button {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  #expert {
+    border-style: solid;
+  }
+
+  button.heatmap {
+    border-radius: 28px;
+    width: 80%;
+    background: #f2e49e;
+  }
+
+  button.picto {
+    border-radius: 28px;
+    width: 80%;
+    background: #9ef1f2 ;
+  }
+
+  div.tooltip {
+      position: absolute;
+      text-align: left;
+      width: 100px;
+      height: 28px;
+      padding: 2px;
+      font: 6px sans-serif;
+      background: lightsteelblue;
+      border: 0px;
+      border-radius: 8px;
+      pointer-events: none;
+  }
