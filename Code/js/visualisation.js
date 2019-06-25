@@ -573,10 +573,46 @@ function drawCart(data) {
             france["objects"]["poly"]["geometries"][fr2id["FR82"]]["properties"]["deaths"] = filt_data_cart[20].y2015; // Provence-Alpes-Côte d’Azur
             france["objects"]["poly"]["geometries"][fr2id["FR83"]]["properties"]["deaths"] = filt_data_cart[21].y2015; // Corse
 
+            // regions value
+           france["objects"]["poly"]["geometries"][fr2id["FR10"]]["properties"]["regions"] = "Île-de-France";
+
+           france["objects"]["poly"]["geometries"][fr2id["FR24"]]["properties"]["regions"] = "Centre";
+           france["objects"]["poly"]["geometries"][fr2id["FR26"]]["properties"]["regions"] = "Bourgogne";
+           france["objects"]["poly"]["geometries"][fr2id["FR25"]]["properties"]["regions"] = "Basse Normandie";
+           france["objects"]["poly"]["geometries"][fr2id["FR23"]]["properties"]["regions"] = "Haute Normandie";
+           france["objects"]["poly"]["geometries"][fr2id["FR22"]]["properties"]["regions"] = "Picardie";
+           france["objects"]["poly"]["geometries"][fr2id["FR21"]]["properties"]["regions"] = "Champagne Ardennes";
+
+           france["objects"]["poly"]["geometries"][fr2id["FR30"]]["properties"]["regions"] = "Nord Pas de Calais";
+
+           france["objects"]["poly"]["geometries"][fr2id["FR41"]]["properties"]["regions"] = "Lorraine";
+           france["objects"]["poly"]["geometries"][fr2id["FR42"]]["properties"]["regions"] = "Alsace";
+           france["objects"]["poly"]["geometries"][fr2id["FR43"]]["properties"]["regions"] = "Franche Comté";
+
+           france["objects"]["poly"]["geometries"][fr2id["FR51"]]["properties"]["regions"] = "Pays de la Loire";
+           france["objects"]["poly"]["geometries"][fr2id["FR52"]]["properties"]["regions"] = "Bretagne";
+           france["objects"]["poly"]["geometries"][fr2id["FR53"]]["properties"]["regions"] = "Poitou Charente";
+
+           france["objects"]["poly"]["geometries"][fr2id["FR61"]]["properties"]["regions"] = "Aquitaine";
+           france["objects"]["poly"]["geometries"][fr2id["FR62"]]["properties"]["regions"] = "Midi Pyrénées";
+           france["objects"]["poly"]["geometries"][fr2id["FR63"]]["properties"]["regions"] = "Limousin";
+
+           france["objects"]["poly"]["geometries"][fr2id["FR71"]]["properties"]["regions"] = "Rhône-Alpes";
+           france["objects"]["poly"]["geometries"][fr2id["FR72"]]["properties"]["regions"] = "Auvergne";
+
+           france["objects"]["poly"]["geometries"][fr2id["FR81"]]["properties"]["regions"] = "Languedoc Rousillon";
+           france["objects"]["poly"]["geometries"][fr2id["FR82"]]["properties"]["regions"] = "Provence-Alpes-Côte d’Azur";
+           france["objects"]["poly"]["geometries"][fr2id["FR83"]]["properties"]["regions"] = "Corse";
+
             console.log(france);
 
+            var mincolor = d3.min(filt_data_cart, function(d) { return d["y2015"]; } );
+            var maxcolor = d3.max(filt_data_cart, function(d) { return d["y2015"]; } );
+            var diff = maxcolor - mincolor ;
+            var domain_colors = [mincolor, mincolor + (diff/5), mincolor + 2*(diff/5), mincolor + 3*(diff/5), mincolor + 4*(diff/5), maxcolor ]
+            // var domain_colors = [maxcolor, mincolor + 4*(diff/5), mincolor + 3*(diff/5), mincolor + 2*(diff/5), mincolor + 1*(diff/5), mincolor ]
             const colorScale  = d3.scaleLinear()
-                                    .domain([0,1,100,1000,15999,16000])
+                                    .domain(domain_colors)
                                     .range([...d3.schemeRdBu[11]]);
 
             console.log(colorScale(100));
@@ -588,8 +624,8 @@ function drawCart(data) {
                 .value(({ properties }) => properties.scale)
                 .color(({ properties: { deaths } }) => colorScale(deaths))
                 .projection(d3.geoMercator().scale(2500).translate([220, 2700]))
-                .label(({ properties: p }) => `Nombre de mort ${p.deaths}`)
-                .valFormatter(d3.format(".3s"))
+                .label(({ properties: p }) => `${p.regions} <br/>Nombre de mort`)
+                .valFormatter(d3.format(""))
                 (document.getElementById('france'));
 
         });
