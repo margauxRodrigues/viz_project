@@ -19,8 +19,9 @@ d3.csv("data/data_fr.csv")
         geo0: d.geo_niv_0,
         geo1: d.geo_niv_1,
         test: d.nom_geo_niv_1,
-        icd10_0: d.icd10_nom_niv_0,
-        icd10_1: d["icd10_nom_niv_1"],
+        //geo2: d.geo_niv_2,
+        icd10_0: d.icd10_nom_niv_1,
+        icd10_1: d["icd10_nom_niv_1.1"],
         icd10_2: d.icd10_nom_niv_2,
         maladies:d.maladies,
         region:d.region,
@@ -33,6 +34,8 @@ d3.csv("data/data_fr.csv")
         console.log("First row : ", rows[0])
         console.log("Last row : ", rows[rows.length-1])
         data = rows;
+        // console.log(data)
+        //draw();
     }
 });
 
@@ -57,25 +60,24 @@ var containerHeight_barchart = parentDiv_barchart.clientHeight;
 
 // Construction hiérarchie
 const levels_bubble = ["region", "sex"]
-const filtre_region_default = ["France"]
-// ["ile de France", "Champagne-Ardenne ", "Picardie ", "Haute-Normandie ", "Centre  ", "Basse-Normandie ", "Bourgogne ", "Lorraine ", "Alsace ", "Franche-Comte ", "Pays de la Loire ", "Bretagne ", "Poitou-Charentes ", "Aquitaine ", "Midi-Pyrenees ", "Limousin ", "Rhone-Alpes ",  "Auvergne ", "Nord - Pas-de-Calais ", "Languedoc-Roussillon ", "Provence-Alpes-Cote d'Azur ", "Corse "]
-const levels_sunburst = [ "icd10_1", "icd10_2", "maladies"]
+const filtres_bubble = ["Basse-Normandie ", "Auvergne ", "Nord - Pas-de-Calais "]
+const levels_sunburst = ["icd10_1", "icd10_2"]
 var hierarchy_bubble;
 var hierarchy_sunburst;
-var filtre_regions;
 
 setTimeout(function(){
     var filt_data_bubble = data.filter(function(row){
-        return (row["sex"] !== "T") && (row["maladies"] !== row["icd10_2"]) && (row["maladies"]!=="Toutes causes de mortalite") && (row["region"]=="France") &&  (filtre_region_default.indexOf(row["region"]) !== -1);})
-
-    var filt_data_sunburst = data.filter(function(row){
-        return ((row["region"] == "France") && (row["maladies"]!=="Toutes causes de mortalite") && (row["sex"] == "T"));})
-
-    console.log(filt_data_sunburst)
+        return (row["region"]!=="FR") && (filtres_bubble.indexOf(row["region"]) !== -1);
+      }); 
+    
+    /* var filt_data_barchart = data.filter(function(row){
+        return (row)
+    })
+    */
     hierarchy_bubble = flatToHierarchyBubble(filt_data_bubble, levels_bubble, 'maladies', 'y2015')
-    hierarchy_sunburst = flatToHierarchyBubble(filt_data_sunburst, levels_sunburst, 'maladies', 'y2015')
+    hierarchy_sunburst = flatToHierarchy(filt_data_bubble, levels_sunburst, 'maladies', 'y2015', 'maladies')
+    console.log(hierarchy_bubble)
     focus = hierarchy_bubble;
-    console.log(hierarchy_sunburst)
     //console.log(d3.pack(hierarchy))
     g.on("click", function(){
         zoom(hierarchy_bubble);
@@ -88,13 +90,16 @@ setTimeout(function(){
     )
     .map(([k, v]) => ({ Maladie: k, Value: v }))
     console.log(output)
+    
 
     drawViz(hierarchy_bubble)
     drawViz2(hierarchy_sunburst)
     drawBarChart(output)
+    /* drawViz3(filt_data_barchart) */
     },1000);
 
 // ALL RIGHT DATA IS GLOBAL 
+
 
 // Append bubble object
 var g = d3.select("#bubble")
@@ -175,10 +180,12 @@ function drawViz(data) {
         .attr('text-anchor', "middle")
         // sets the vertical alignment to the middle of the line
         .attr('dy', '0.35em')
+        //.join("text")
+        //.style("fill-opacity", d => d.parent === vRoot ? 0 : 1)
+        //.style("display", d => d.parent === vRoot ? "inline" : "none")
         .style("display", "none")
         .text(d => d.data.name)
-    
-        zoomTo([vRoot.x, vRoot.y, vRoot.r * 2]);
+    zoomTo([vRoot.x, vRoot.y, vRoot.r * 2]);
     
 }
 
@@ -224,10 +231,6 @@ function drawViz2(data) {
         slice.selectAll('text').remove();
         newSlice.append("svg:title")
             .text(showtextSunburst)
-        slice.on("mouseover", function() { 
-                d3.select(this).style("opacity", 0.4)});
-        slice.on("mouseout", function() { 
-            d3.select(this).style("opacity", 1)});
         newSlice.on("click", highlightSelectedSlice);
 
 }
@@ -399,11 +402,12 @@ function zoom(d) {
         .on("end", function(d) { if (d.parent !== focus) this.style.display = "none"; });
     }
 
+
 function highlightSelectedSlice(c,i) {
         clicked = c;
         newSlice.style("opacity", 1);
-        console.log(clicked.height)
-        if (previouscliked !== c){  
+
+        if (previouscliked !== c){
             newSlice.filter(function(d) {
                 if (d == clicked) {
                     return true;}
@@ -412,22 +416,22 @@ function highlightSelectedSlice(c,i) {
             subset = clicked.data.name  
             var filtres_bubble_maladie = subset;
             if (clicked.height == 1 ){
-                var filt_data_bubble = data.filter(function(row){
-                return (row["sex"] !== "T") && (row["region"]!=="FR") && (filtre_region_default.indexOf(row["region"]) !== -1) && (filtres_bubble_maladie.indexOf(row['maladies']) !== -1);
+            var filt_data_bubble = data.filter(function(row){
+                return (row["sex"] !== "T") && (row["region"]!=="FR") && (filtres_bubble.indexOf(row["region"]) !== -1) && (filtres_bubble_maladie.indexOf(row['icd10_2']) !== -1);
                 }); 
                 hierarchy_bubble = flatToHierarchyBubble(filt_data_bubble, levels_bubble, 'maladies', 'y2015');
                 drawViz(hierarchy_bubble);
             }
             else if (clicked.height == 2 ){
                 var filt_data_bubble = data.filter(function(row){
-                    return (row["sex"] !== "T") && (row["region"]!=="FR") && (filtre_region_default.indexOf(row["region"]) !== -1) && (filtres_bubble_maladie.indexOf(row['icd10_2']) !== -1);
+                    return (row["sex"] !== "T") && (row["region"]!=="FR") && (filtres_bubble.indexOf(row["region"]) !== -1) && (filtres_bubble_maladie.indexOf(row['icd10_1']) !== -1);
                     }); 
                     hierarchy_bubble = flatToHierarchyBubble(filt_data_bubble, levels_bubble, 'maladies', 'y2015')
                     drawViz(hierarchy_bubble)
                 }
-            else if (clicked.height == 3 ){
-                    var filt_data_bubble = data.filter(function(row){
-                    return (row["sex"] !== "T") && (row["region"]!=="FR") && (filtre_region_default.indexOf(row["region"]) !== -1) && (filtres_bubble_maladie.indexOf(row['icd10_1']) !== -1);
+            else if (clicked.height == 0 ){
+                var filt_data_bubble = data.filter(function(row){
+                    return (row["sex"] !== "T") && (row["region"]!=="FR") && (filtres_bubble.indexOf(row["region"]) !== -1) && (filtres_bubble_maladie.indexOf(row['maladies']) !== -1);
                     }); 
                     hierarchy_bubble = flatToHierarchyBubble(filt_data_bubble, levels_bubble, 'maladies', 'y2015')
                     drawViz(hierarchy_bubble)
@@ -436,12 +440,13 @@ function highlightSelectedSlice(c,i) {
             }
         else{
             var filt_data_bubble = data.filter(function(row){
-                return (row["sex"] !== "T") && (row["region"]!=="FR") && (filtre_region_default.indexOf(row["region"]) !== -1);
+                return (row["sex"] !== "T") && (row["region"]!=="FR") && (filtres_bubble.indexOf(row["region"]) !== -1);
                 }); 
                 hierarchy_bubble = flatToHierarchyBubble(filt_data_bubble, levels_bubble, 'maladies', 'y2015');
                 drawViz(hierarchy_bubble);
         }
     };
+
 
 function showtext(d){
     return ("Sélection : "+ d.data.name
@@ -452,3 +457,7 @@ function showtextSunburst(d){
     return ("Sélection : "+ d.data.name
             +"\nTotal : " + d.value )
 }
+
+
+
+
