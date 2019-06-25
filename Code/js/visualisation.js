@@ -324,6 +324,8 @@ function drawBarChart(data){
           .call(d3.axisLeft(yAxis))
           .attr("class", "axisYellow")
           .attr("transform", "translate(288,-10)")
+          .selectAll("text")
+            .attr("transform", "translate(-40,0)")
   
       }
 
