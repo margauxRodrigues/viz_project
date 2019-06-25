@@ -244,6 +244,10 @@ function drawViz2(data) {
         slice.exit().remove();
 
         slice.selectAll('text').remove();
+        slice.on("mouseover", function() { 
+            d3.select(this).style("opacity", 0.4)});
+        slice.on("mouseout", function() { 
+            d3.select(this).style("opacity", 1)});
         newSlice.append("svg:title")
             .text(showtextSunburst)
         newSlice.on("click", highlightSelectedSlice);
