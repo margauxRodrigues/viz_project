@@ -163,7 +163,7 @@ function drawViz(data) {
     vSlices.attr('cx', function (d) { return d.x; })
         .attr('cy', function (d) { return d.y; })
         .attr('r', function (d) { return d.r; })
-        .style("fill-opacity", "0.1")
+        .style("fill", function(d) { return color(d.x) })
         //.attr("pointer-events", d => !d.children ? "none" : null)
         .on("mouseover", function() { 
             d3.select(this).attr("stroke", "#000"); 
