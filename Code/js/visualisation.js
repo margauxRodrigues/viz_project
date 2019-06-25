@@ -85,14 +85,10 @@ setTimeout(function(){
         (row["icd10_1"] !== row["icd10_0"]) &&
         (row["sex"] == "T");
     });
-    var filt_data_barchart = data.filter(function(row){
-        return (row["sex"] == "T") &&
-        (row["maladies"] !== "Toutes causes de mortalite") &&
-        (row["region"] == "France")
+    /* var filt_data_barchart = data.filter(function(row){
+        return (row)
     })
-    
-    console.log(filt_data_barchart)
-
+    */
     hierarchy_bubble = flatToHierarchyBubble(filt_data_bubble, levels_bubble, 'maladies', 'y2015')
     hierarchy_sunburst = flatToHierarchy(filt_data_sunburst, levels_sunburst, 'maladies', 'y2015', 'maladies')
     console.log(hierarchy_bubble)
@@ -103,7 +99,7 @@ setTimeout(function(){
     });
         console.log(hierarchy_sunburst)
         output = d3.rollups(
-        filt_data_barchart,
+        data,
         xs => d3.sum(xs, x => x.y2015),
         d =>  d.icd10_2
     )
@@ -116,7 +112,7 @@ setTimeout(function(){
     drawBarChart(output)
     drawCart(data)
     /* drawViz3(filt_data_barchart) */
-    },2000);
+    },1000);
 
 // ALL RIGHT DATA IS GLOBAL 
 
