@@ -47,7 +47,7 @@ var vHeight_bubble = containerHeight_bubble;
 var parentDiv_sunburst = document.getElementById("sunburst")
 var width_sunburst = parentDiv_sunburst.clientWidth;
 var height_sunburst = parentDiv_sunburst.clientHeight;
-var radius = Math.min(width_sunburst, height_sunburst) / 2;
+var radius = Math.min(width_sunburst, height_sunburst) / (5/3);
 var color = d3.scaleOrdinal(d3.schemeCategory20b);
 
 // adapt barchart
@@ -143,7 +143,8 @@ function drawViz(data) {
     vSlices.attr('cx', function (d) { return d.x; })
         .attr('cy', function (d) { return d.y; })
         .attr('r', function (d) { return d.r; })
-        .style("fill-opacity", "0.1")
+        .style("fill", function(d) { return color(d.x) })
+        // .style("fill-opacity", "0.1")
         //.attr("pointer-events", d => !d.children ? "none" : null)
         .on("mouseover", function() { 
             d3.select(this).attr("stroke", "#000"); 
