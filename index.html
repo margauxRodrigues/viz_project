@@ -14,9 +14,14 @@
     <div id="bloc_page">
 
         <header id="header">
-            <h1 id="titre">DEATH STAR</h1>
+            <button id="pause" onclick="document.getElementById('sound1').pause();">
+                <h1 id="titre">DEATH STAR</h1>
+            </button>
             <div id="logo">
-                <img src="css/images/deathStar.png" alt="logo du site">
+                <audio id="sound1" src="css/musique/music.mp3" preload="auto"></audio>
+                <button id="play" onclick="document.getElementById('sound1').play() ;">
+                    <img id="img" src="css/images/deathStar.png" alt="logo du site">
+                </button>
             </div>
         </header id="header">
 
@@ -40,7 +45,7 @@
     <script type="text/javascript" src="Code/js/visualisation.js"></script>
 
 
-   
+
 </body>
 
 </html>

@@ -55,14 +55,34 @@ body {
 }
 
 #logo img {
+  /* background: black; */
   width: 270px;
   height: 180px;
+}
+
+
+#play {
+  background: transparent;
+  border: transparent;
+  color: white;
+}
+
+#pause{
+  background: transparent;
+  border: transparent;
+  color: white;
+  display: flex;
+  font-size: 1em;
+  text-align: center;
+  align-items: center;
+  color: #FFDE06;
+  font-family: 'STARWARS';
 }
 
 /*-------- Content -------- */
 
 #main {
-  margin: 10 0 0 0px;
+  margin: 20 0 0 0px;
   display: flex;
   justify-content: space-evenly;
   max-height: 750px;
